@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Data</title>
+</head>
+<body>
+
+  <h2>List of Data Entries</h2>
+
+  <ul>
+    {% for entry in data_entries %}
+      <li>
+        <strong>Title:</strong> {{ entry.title }}<br>
+        <strong>Category:</strong> {{ entry.category }}<br>
+        <!-- Add more fields as needed -->
+      </li>
+    {% endfor %}
+  </ul>
+
+</body>
+</html>

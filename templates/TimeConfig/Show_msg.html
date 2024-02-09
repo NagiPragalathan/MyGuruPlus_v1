@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .timer-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            padding: 10px;
+            margin: 0 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Glass Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            padding: 10px;
+            margin: 0 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-buttons button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="timer-box">
+        <h2>Timer Already Updated</h2>
+        <p id="timeDisplay" style="background: #d0d0d0; padding: 21px 0px; border: 2px solid #b8b8b8; border-radius: 7px;">Time is : {{ obj.time_mis }} minutes</p>
+        <h6>You can update or view the previous logs you have completed.</h6>
+        <div class="button-container">
+            <button onclick="openEditModal()">Edit Time</button>
+            <button onclick="openLogsModal()">View Logs</button>
+        </div>
+    </div>
+    
+
+    <!-- Edit Time Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Time</h2>
+            <p>Are you sure you want to edit the time?</p>
+            <div class="modal-buttons">
+                <button onclick="closeModal()">Cancel</button>
+                <a href="{% url 'update_config' config_id=obj.id path=path %}"><button onclick="editTime()">Edit</button></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Logs Modal -->
+    <div id="logsModal" class="modal">
+        <div class="modal-content">
+            <h2>View Logs</h2>
+            <ul style="height: 115px; overflow-x: hidden; overflow-y: scroll;"> 
+                {% for config in configs %}
+                    <li>
+                            {{ config.time_mis }} 
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="modal-buttons">
+                <button onclick="closeModal()">Close</button>
+                <a href="{% url 'config_list' path=path %}"><button onclick="closeModal()">More</button></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openEditModal() {
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function openLogsModal() {
+            document.getElementById('logsModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('logsModal').style.display = 'none';
+        }
+
+        function editTime() {
+            console.log('Editing time...');
+            closeModal();
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the total minutes from the Django template
+            var totalMinutes = {{ obj.time_mis }};
+    
+            // Calculate hours, minutes, and seconds
+            var hours = Math.floor(totalMinutes / 60);
+            var minutes = totalMinutes % 60;
+            var seconds = 0; // Assuming seconds are always zero for this example
+    
+            // Format the time
+            var formattedTime = padNumber(hours) + ':' + padNumber(minutes) + ':' + padNumber(seconds);
+    
+            // Update the time display
+            document.getElementById('timeDisplay').innerHTML = 'Time is : ' + formattedTime;
+        });
+        function padNumber(number) {
+            // Add leading zero if the number is less than 10
+            return (number < 10 ? '0' : '') + number;
+        }
+    
+    </script>
+</body>
+</html>

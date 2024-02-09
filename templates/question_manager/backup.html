@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quiz Builder</title>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Quiz Builder</h2>
+
+    <!-- Instructions input -->
+    <div class="mb-4">
+        <label for="quizInstructions" class="form-label">Instructions:</label>
+        <textarea class="form-control" id="quizInstructions" name="quizInstructions" rows="4"></textarea>
+    </div>
+
+    <div id="questionsContainer">
+        <!-- At least one empty question input and options -->
+        <div class="mb-4" id="questionContainer1">
+            <h4>Question 1:</h4>
+            
+            <div class="mb-3">
+                <label for="question1" class="form-label">Question:</label>
+                <input type="text" class="form-control" id="question1" name="questions[]" required>
+            </div>
+
+            <div class="mb-3" id="optionsContainer1">
+                <label>Options:</label>
+                <div class="mb-3" id="optionContainer11">
+                   
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary mb-3" onclick="addOption(1)">Add Option</button>
+
+            <div class="mb-3">
+                <label for="correctAnswer1" class="form-label">Correct Answer:</label>
+                <select class="form-select" id="correctAnswer1" name="correctAnswers[]" required>
+                    <!-- Options will be dynamically added -->
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-danger" onclick="deleteQuestion(1)">Delete Question</button>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-success mb-3" onclick="addQuestion()">Add New Question</button>
+
+    <button type="submit" class="btn btn-primary">Submit Quiz</button><button type="button" class="btn btn-primary" onclick="getQuizData()">Get Quiz Data (JSON)</button>
+
+</div>
+
+<script>
+    let questionCount = 1;
+    var question_id = []
+
+    function addQuestion() {
+        questionCount++;
+
+        const questionsContainer = document.getElementById('questionsContainer');
+
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('mb-4');
+        questionDiv.id = `questionContainer${questionCount}`;
+        question_id.push(`questionContainer${questionCount}`)
+        questionDiv.innerHTML = `
+            <h4>Question ${questionCount}:</h4>
+            
+            <div class="mb-3">
+                <label for="question${questionCount}" class="form-label">Question:</label>
+                <input type="text" class="form-control" id="question${questionCount}" name="questions[]" required>
+            </div>
+
+            <div class="mb-3" id="optionsContainer${questionCount}">
+                <label>Options:</label>
+                <div class="mb-3" id="optionContainer${questionCount}1">
+                    <label for="option${questionCount}1" class="form-label">Option 1:</label>
+                    <input type="text" class="form-control" id="option${questionCount}1" name="options[]" required>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteOption(${questionCount}, 1)">Delete</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary mb-3" onclick="addOption(${questionCount})">Add Option</button>
+
+            <div class="mb-3">
+                <label for="correctAnswer${questionCount}" class="form-label">Correct Answer:</label>
+                <select class="form-select" id="correctAnswer${questionCount}" name="correctAnswers[]" required>
+                    <!-- Options will be dynamically added -->
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-danger" onclick="deleteQuestion(${questionCount})">Delete Question</button>
+        `;
+
+        questionsContainer.appendChild(questionDiv);
+
+        // Add default option for the new question
+        addOption(questionCount);
+    }
+
+    function addOption(questionNumber) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionNumber}`);
+        const optionCount = optionsContainer.querySelectorAll('input').length + 1;
+
+        const optionInput = document.createElement('div');
+        optionInput.classList.add('mb-3');
+        optionInput.id = `optionContainer${questionNumber}${optionCount}`;
+        optionInput.innerHTML = `
+            <label for="option${questionNumber}${optionCount}" class="form-label">Option ${optionCount}:</label>
+            <input type="text" class="form-control" id="option${questionNumber}${optionCount}" name="options[]" required>
+            <button type="button" class="btn btn-danger btn-sm" onclick="deleteOption(${questionNumber}, ${optionCount})">Delete</button>
+        `;
+
+        optionsContainer.appendChild(optionInput);
+
+        // Add the new option to the correct answer dropdown
+        const correctAnswerDropdown = document.getElementById(`correctAnswer${questionNumber}`);
+        const newOption = document.createElement('option');
+        newOption.text = `Option ${optionCount}`;
+        newOption.value = `option${questionNumber}${optionCount}`;
+        correctAnswerDropdown.add(newOption);
+
+        // Enable the correct answer dropdown
+        correctAnswerDropdown.removeAttribute('disabled');
+    }
+
+    function deleteOption(questionNumber, optionNumber) {
+        const optionContainer = document.getElementById(`optionContainer${questionNumber}${optionNumber}`);
+        optionContainer.remove();
+        updateCorrectAnswerDropdown(questionNumber);
+    }
+
+    function deleteQuestion(questionNumber) {
+        const questionContainer = document.getElementById(`questionContainer${questionNumber}`);
+        questionContainer.remove();
+        updateCorrectAnswerDropdown(questionNumber);
+    }
+
+    function updateCorrectAnswerDropdown(questionNumber) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionNumber}`);
+        const correctAnswerDropdown = document.getElementById(`correctAnswer${questionNumber}`);
+    
+        if (optionsContainer && correctAnswerDropdown) {
+            correctAnswerDropdown.innerHTML = '';
+    
+            const optionInputs = optionsContainer.querySelectorAll('input');
+    
+            optionInputs.forEach((input, index) => {
+                const optionValue = input.id;
+                const optionText = `Option ${index + 1}`;
+                const newOption = document.createElement('option');
+                newOption.text = optionText;
+                newOption.value = optionValue;
+                correctAnswerDropdown.add(newOption);
+            });
+    
+            if (optionInputs.length === 0) {
+                correctAnswerDropdown.setAttribute('disabled', 'disabled');
+            }
+        }
+    }
+    function getQuizData() {
+        const quizData = {
+            instructions: document.getElementById('quizInstructions').value,
+            questions: []
+        };
+    
+        const questionsContainer = document.getElementById('questionsContainer');
+        const questionDivs = questionsContainer.querySelectorAll('[id^="questionContainer"]');
+        console.log(questionDivs)
+    
+        questionDivs.forEach((questionDiv, questionIndex) => {
+            console.log(questionDiv.id.at(-1))
+            const questionData = {
+                question: questionDiv.querySelector(`#question${questionDiv.id.at(-1)}`).value,
+                options: [],
+                correctAnswer: document.getElementById(`correctAnswer${questionDiv.id.at(-1)}`).value
+            };
+    
+            const optionsContainer = questionDiv.querySelector(`#optionsContainer${questionDiv.id.at(-1)}`);
+            const optionInputs = optionsContainer.querySelectorAll('[id^="option"]');
+    
+            optionInputs.forEach((optionInput) => {
+                questionData.options.push(optionInput.value);
+            });
+    
+            quizData.questions.push(questionData);
+        });
+    
+        // Display the JSON data in the console
+        console.log(JSON.stringify(quizData, null, 2));
+    }
+    
+
+    function copyQuestion(questionIndex) {
+        const sourceQuestion = document.getElementById(`question${questionIndex}`).value;
+        const sourceOptions = Array.from(document.querySelectorAll(`#optionsContainer${questionIndex} [id^="option"]`)).map(input => input.value);
+        const sourceCorrectAnswer = document.getElementById(`correctAnswer${questionIndex}`).value;
+        const sourceMultiSelect = Array.from(document.querySelectorAll(`#multiSelect${questionIndex} option:checked`)).map(option => option.value);
+
+        // Store the copied data in a temporary variable
+        window.copiedQuestion = {
+            question: sourceQuestion,
+            options: sourceOptions,
+            correctAnswer: sourceCorrectAnswer,
+            multiSelect: sourceMultiSelect
+        };
+
+        console.log("Question copied:", window.copiedQuestion);
+    }
+
+    function pasteQuestion(questionIndex) {
+        if (window.copiedQuestion) {
+            const targetQuestion = document.getElementById(`question${questionIndex}`);
+            const targetOptions = document.querySelectorAll(`#optionsContainer${questionIndex} [id^="option"]`);
+            const targetCorrectAnswer = document.getElementById(`correctAnswer${questionIndex}`);
+            const targetMultiSelect = document.querySelectorAll(`#multiSelect${questionIndex} option`);
+
+            // Paste the copied data to the target question
+            targetQuestion.value = window.copiedQuestion.question;
+            targetOptions.forEach((input, index) => {
+                input.value = window.copiedQuestion.options[index];
+            });
+            targetCorrectAnswer.value = window.copiedQuestion.correctAnswer;
+
+            // Clear previous selections in the multi-select box
+            targetMultiSelect.forEach(option => option.selected = false);
+
+            // Set new selections in the multi-select box
+            window.copiedQuestion.multiSelect.forEach(value => {
+                const option = document.querySelector(`#multiSelect${questionIndex} option[value="${value}"]`);
+                if (option) {
+                    option.selected = true;
+                }
+            });
+
+            console.log("Question pasted:", window.copiedQuestion);
+        }
+    }
+
+</script>
+
+</body>
+</html>
+ 
+
+{% comment %} https://chat.openai.com/c/c1a437d1-0853-4111-aaca-070009718c3f {% endcomment %}

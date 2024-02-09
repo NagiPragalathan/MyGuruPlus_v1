@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+
+</head>
+<body>
+    <!-- Pills navs -->
+    <section class="dvh-100" style="background-color: #bdabaf;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+              <div class="card" style="border-radius: 1rem;">
+                <div class="row g-0">
+                  <div class="col-md-6 col-lg-5 d-none d-md-block">
+                    <img src="https://images.pexels.com/photos/1848731/pexels-photo-1848731.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                      alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem; height:100%" />
+                  </div>
+                  <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                    <div class="card-body p-4 p-lg-5 text-black">
+                    {% if msg %}
+                    <div id="message" style="background-color: #f44336; color: white; padding: 10px; display: flex; border-radius: 10px; margin-bottom: 12px; justify-content: space-between;">
+                        {{ msg }}
+                        <button onclick="closeMessage()" style="border-radius: 7px; width: 29px; border: 1px solid #83d083; background: white;">X</button>
+                    </div>
+                    {% else %}
+                        <div></div>
+                    {% endif %}
+                    <form method="post" action="{% url 'signup' mail=mail %}">
+                        {% csrf_token %}
+                        <div class="d-flex align-items-center mb-3 pb-1">
+                          <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                          <span class="h1 fw-bold mb-0">Myguruplus</span>
+                        </div>
+                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">SignUp your account here</h5>
+  
+      
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="otp">otp:</label>
+                          <input type="text" id="otp" name="otp" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="username">username:</label>
+                          <input type="text" id="username" name="username" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="password">password:</label>
+                          <input type="password" id="password" name="password" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="confirm_password">confirm password:</label>
+                          <input type="text" id="confirm_password" name="confirm_password" class="form-control form-control-lg" required>
+                        </div>
+      
+                        <div class="pt-1 mb-4">
+                          <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                        </div>
+      
+                        <p class="mb-5 pb-lg-2" style="color: #393f81;">If you have an account? <a href="/login"
+                            style="color: #393f81;">SignIn here</a></p>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+</body>
+<script>
+    function closeMessage() {
+        // Your custom close logic here
+        document.getElementById('message').style.display = 'none';
+    }
+</script>
+
+</html>

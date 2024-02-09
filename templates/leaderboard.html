@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .leaderboard-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            flex: 1;
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+            padding: 10px;
+            background-color: #8e1aaf;
+            color: #fff;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-left: 10px;
+            padding: 10px;
+            background-color: #461649;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #8e1aaf;
+        }
+
+        .leaderboard {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #fff;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .leaderboard th, .leaderboard td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        .leaderboard th {
+            background-color: #8e1aaf;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .leaderboard th:hover {
+            background-color: #cc7fe2;
+        }
+
+        .leaderboard tr:hover {
+            background-color: rgba(155, 185, 85, 0.1);
+        }
+
+        .leaderboard tbody tr:nth-child(1) {
+            font-weight: bold;
+            background-color: #fffadd; /* Gold */
+        }
+
+        .leaderboard tbody tr:nth-child(2) {
+            font-weight: bold;
+            background-color: #f1f1f1; /* Silver */
+        }
+
+        .leaderboard tbody tr:nth-child(3) {
+            font-weight: bold;
+            background-color: #ffecd9; /* Bronze */
+        }
+
+        .leaderboard tbody tr:nth-child(1) td:first-child::after {
+            content: " 🥇"; /* Gold symbol */
+        }
+
+        .leaderboard tbody tr:nth-child(2) td:first-child::after {
+            content: " 🥈"; /* Silver symbol */
+        }
+
+        .leaderboard tbody tr:nth-child(3) td:first-child::after {
+            content: " 🥉"; /* Bronze symbol */
+        }
+
+        @media screen and (max-width: 600px) {
+            .leaderboard {
+                overflow-x: auto;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+<div class="leaderboard-container">
+    <div class="title-container">
+        <h1 class="title">Leaderboard</h1>
+        <a href="/list_course/{{ path }}"><button class="back-button">Back</button></a>
+    </div>
+    <div style="background-color: #8e1aaf; padding: 20px; box-sizing: border-box; width: 100%;">
+        <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333; margin-bottom: 20px; background-color: #ffffff; padding: 20px; border-radius: 8px;">
+            {% if current_user_data %}
+                <p style="margin: 0;"><span style="background: #d0d0d0; padding: 8px; border: 1px solid #acacac; border-radius: 8px;"> Your Rank: {{ current_user_data.rank }} </span> &nbsp;| <span style="background: #d0d0d0; padding: 8px; border: 1px solid #acacac; border-radius: 8px;">Mark: {{ current_user_data.mark }} </span></p>
+            {% else %}
+                <p style="margin: 0;">You are not in the leaderboard for this path.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+
+    <table class="leaderboard">
+        <thead>
+        <tr>
+            <th>Ranking</th>
+            <th>Candidate Name</th>
+            <th>Total Marks</th>
+            <th>Attempt</th>
+            <th>Last Updated Date</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for entry in leaderboard_data %}
+                <tr>
+                    <td>{{ entry.rank }}</td>
+                    <td>{{ entry.user_id }}</td>
+                    <td>{{ entry.mark }}</td>
+                    <td>{{ entry.attempt }}</td>
+                    <td>{{ entry.last_updated_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+</body>
+</html>

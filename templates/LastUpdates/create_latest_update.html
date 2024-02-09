@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Latest Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        textarea {
+            width: 95%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            resize: vertical;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px; /* Add margin to separate from textarea */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style the "Latest Updates" paragraph */
+        .latest-updates {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Style the "Show" button */
+        .list-button {
+            text-align: center;
+        }
+
+        .list-button a {
+            text-decoration: none;
+        }
+
+        .list-button button {
+            background-color: #28a745; /* Green color */
+        }
+
+        .list-button button:hover {
+            background-color: #218838; /* Darker green color on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Latest Update</h1>
+    <form action="{% url 'create_latest_update' %}" method="post">
+        {% csrf_token %}
+        <textarea name="message" placeholder="Enter your update message" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <diV style="display: flex; margin-top: 22px; flex-direction: column; align-items: center; background: white; justify-content: center; width: 45%; border: 1px solid #cccccc; border-radius: 10px;"> 
+            <div class="latest-updates">
+                <p>You can check the <strong>Latest Updates</strong></p>
+            </div>
+            <div class="list-button">
+                <a href="{% url 'latest_update_list' %}"><button>Show</button></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

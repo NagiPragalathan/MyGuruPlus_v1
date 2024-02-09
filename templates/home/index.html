@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>Myguruplus</title>
+
+    <style>
+      .star-container {
+          display: inline-block;
+          font-size: 24px;
+      }
+
+      .star-container .star {
+          color: #ccc;
+          cursor: pointer;
+      }
+
+      .star-container .star.gold {
+          color: gold;
+      }
+  </style>
+   
+    <!-- Bootstrap core CSS -->
+    <link href=" {% static 'vendor/bootstrap/css/bootstrap.min.css' %} " rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href=" {% static 'assets/css/fontawesome.css' %} ">
+    <link rel="stylesheet" href=" {% static 'assets/css/templatemo-digimedia-v2.css' %} ">
+    <link rel="stylesheet" href=" {% static 'assets/css/animated.css' %} ">
+    <link rel="stylesheet" href=" {% static 'assets/css/owl.css' %} ">
+
+    <!--
+
+TemplateMo 568 DigiMedia
+
+https://templatemo.com/tm-568-digimedia
+
+-->
+  </head>
+  
+
+<body>
+  
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+<!-- Pre-header Starts --> <!-- Pre-header End -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="#Myguruplus" class="logo d-flex align-items-center py-3 ">
+              <img src="'assets/images/logo.png" alt="">
+              <h3 class="fw-bold" id="#Myguruplus" style="color: #b70ed5; text-shadow: 1px 1px black;">MYGURUPLUS</h3>
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li class="scroll-to-section "><a href="#top" class="active home home-hover">Home</a></li>
+              <li class="scroll-to-section"><a href="#about">About</a></li>
+             
+              <li class="scroll-to-section"><a href="#portfolio">Courses</a></li>
+           
+              <li class="scroll-to-section"><a href="#contact">Contact</a></li> 
+              {% if auth %}
+              <li class="scroll-to-section"><div class="border-first-button"><a href="{% url 'logout' %}">Logout</a></div></li> 
+              {% else %}
+              <li class="scroll-to-section"><div class="border-first-button"><a href="login">SignIn</a></div></li> 
+              {% endif %}
+            </ul>        
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+  <div style="padding-top: 100px; "></div>
+  <div class="bg-primary py-3 h-5 breaking ">
+    <p class="h-5 px-5 fs-5 fw-semibold" style="color:white; font-weight: bold;"> {{ updates }}</p>
+  </div>
+  <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-6 align-self-center">
+              <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <h6>Myguruplus</h6>
+                    <h2>Daily FREE Drill: Conquer TNPSC</h2>
+                    <p> Conquer your TNPSC prep with MyGURUPLUS!  We arm you with a comprehensive arsenal of learning tools1 Lakh+ MCQs: Practice your way to perfection with a massive question bank covering every TNPSC subject. 2000+ Online Tests: Simulate the real exam experience with full-length mock tests and topic-specific quizze.</p>
+                  </div>
+                  {% if auth %}
+                    <div class="col-lg-12 d-flex gap-4">
+                      <div class="border-first-button scroll-to-section">
+                        <a href="/list_course/root">Show Courses</a>
+                      </div>
+                    </div>
+                  {% else %}
+                    <div class="col-lg-12 d-flex gap-4">
+                      <div class="border-first-button scroll-to-section">
+                        <a href="enter_otp">Get Started</a>
+                      </div>
+                      <div class="border-first-button scroll-to-section">
+                        <a href="login">Login</a>
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                <img src="https://s3.india.com/wp-content/uploads/2016/03/1233.jpg" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="about" class="about section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="about-left-image  wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
+                <img src="https://www.careerguide.com/career/wp-content/uploads/2023/10/TNPSC-1024x569.webp" alt="">
+              </div>
+            </div>
+            <div class="col-lg-6 align-self-center  wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+              <div class="about-right-content">
+                <div class="section-heading">
+                  <h6>About Us</h6>
+                  <h4>Who is Myguruplus <em>TNPSC</em></h4>
+                  <div class="line-dec"></div>
+                </div>
+                <p>MyGURUPLUS is your one-stop portal to unlocking your potential and cracking the TNPSC exams. We have over 6 years of experience in the TNPSC coaching field, having trained more than 2,500 students. With over 100,000 MCQ questions for practice, we provide a comprehensive and effective learning platform.
+                </p>
+                <div class="row">
+                  <div class="col-lg-4 col-sm-4">
+                    <div class="skill-item first-skill-item wow fadeIn" data-wow-duration="1s" data-wow-delay="0s">
+                      <div class="progress" data-percentage="90">
+                        <span class="progress-left">
+                          <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                          <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value">
+                          <div>
+                            1 Lak+<br>
+                            <span>Notes</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-sm-4">
+                    <div class="skill-item second-skill-item wow fadeIn" data-wow-duration="1s" data-wow-delay="0s">
+                      <div class="progress" data-percentage="80">
+                        <span class="progress-left">
+                          <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                          <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value">
+                          <div>
+                            22k+ <br>
+                            <span>MCQ</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-sm-4">
+                    <div class="skill-item third-skill-item wow fadeIn" data-wow-duration="1s" data-wow-delay="0s">
+                      <div class="progress" data-percentage="80">
+                        <span class="progress-left">
+                          <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                          <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value">
+                          <div>
+                            40k +<br>
+                            <span>Q/A NOTES</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="services" class="services section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+            <h6>Our Services</h6>
+            <h4>What Our Myguruplus <em>Provides</em></h4>
+            <div class="line-dec"></div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="naccs">
+            <div class="grid">
+              <div class="row">
+                
+                <div class="col-lg-12">
+                  <ul class="nacc">
+                    <li class="active">
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-6 align-self-center">
+                              <div class="left-text">
+                                <h4>Power Prep:TNPSC Mastery Drill
+
+                                  &amp; Adaptive Learning Paths</h4>
+                                <p>Conquer your TNPSC prep with MyGURUPLUS!  We arm you with a comprehensive arsenal of learning tools 2000+ Online Tests: Simulate the real exam experience with full-length mock tests and topic-specific quizzes.
+                                  TNSCERT Tests:We've meticulously crafted tests based on the official TNPSCERT syllabus, ensuring your prep aligns perfectly with the source.
+                                  </p>
+                                <div class="ticks-list"><span><i class="fa fa-check"></i> User-Friendly Interface</span> <span><i class="fa fa-check"></i> Comprehensive Domain Coverage</span> 
+                                   <span><i class="fa fa-check"></i>  Peer Comparison and Leaderboard</span> <span><i class="fa fa-check"></i> User-Friendly Interface</span></div>
+                                <p>1 Lakh+ MCQs: Practice your way to perfection with a massive question bank covering every TNPSC subject.
+                                </p>
+                              </div>
+                            </div>
+                            <div class="col-lg-6 align-self-center">
+                              <div class="right-image">
+                                <img src="https://ideogram.ai/api/images/direct/FH3tOhcpQG2Bl119LQYPFQ.jpg" alt="">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      
+                          
+                    </li>
+                    <li>
+                     
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      
+                           
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>          
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  
+     
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="portfolio" class="our-portfolio section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="section-heading wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.3s">
+                    <h6>Our Courses</h6>
+                    <h4>See Our Recent <em>Courses</em></h4>
+                    <div class="line-dec"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid wow fadeIn" data-wow-duration="1s" data-wow-delay="0.7s">
+      <div class="row">
+          {% for i in courses %}
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+              <div class="portfolio-item h-100"style="display: flex;flex-direction: column;justify-content: space-between;">
+                  <div class="thumb">
+                    <a href="/list_course/root.{{ i.FolderName }}">
+                      <img src="{{ i.FolderImage.url }}" class="img-fluid" alt="">
+                    </a>
+                  </div>
+                  <div class="down-content">
+                      <h4>{{ i.FolderName }}</h4>
+                      <div class="rating-container" id="webDevelopmentRating">
+                          <div class="star-container">
+                              {% for j in rate %}
+                                {% if i.rating < j %}
+                                <span class="star">✩</span>
+                                {% elif  i.rating > j %}
+                                <span class="star">★</span>
+                                {% else %}
+                                <span class="star">✩</span>
+                              {% endif %}
+                              {% endfor %}
+                          </div>
+                      </div>
+                      <p id="rating-value"></p>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="section-heading wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.3s">
+                    <h4 class="pt-5 ">See Our <em>Leaderboard</em></h4>
+                    <div class="line-dec"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid  fadeIn" data-wow-duration="1s" data-wow-delay="0.7s">
+        <div class="row">
+            <div class="col-12 d-flex justify-content-evenly card-container ">
+              <div class="card d-flex col-md-8 col-lg-3 p-3  rounded-5  ">
+                <div class="thumb ">
+                  <img src="https://ideogram.ai/api/images/direct/eBhauiO8Q7Khip8Nadkcyw.jpg" class="rounded " alt="">
+                </div>
+                {% comment %} <h3 class="py-3  d-flex justify-content-center align-items-center fw-bold">Rahul</h3> {% endcomment %}
+              </div>
+              <div class="card d-flex  col-md-8 col-lg-3 p-3  rounded-5  ">
+                <div class="thumb">
+                  <img src="https://ideogram.ai/api/images/direct/w3iyKPBkSAqmypzCiJgQLw.jpg" class="rounded" alt="">
+                </div>
+                {% comment %} <h3 class="py-3  d-flex justify-content-center align-items-center fw-bold">Rahul</h3> {% endcomment %}
+              </div>
+              <div class="card d-flex  col-md-8 col-lg-3 p-3  rounded-5  ">
+                <div class="thumb">
+                  <img src="https://ideogram.ai/api/images/direct/2bVVxLrCSiyyfWWr0p5pgA.jpg" class="rounded " alt="">
+                </div>
+                {% comment %} <h3 class="py-3  d-flex justify-content-center align-items-center fw-bold">Rahul</h3> {% endcomment %}
+              </div>
+            
+        </div>
+    </div>
+  </div>
+
+  <div id="contact" class="contact-us section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+          <div class="section-heading wow fadeIn" data-wow-duration="1s" data-wow-delay="0.5s">
+            <h6>Contact Us</h6>
+            <h4>Get In Touch With Us <em>Now</em></h4>
+            <div class="line-dec"></div>
+          </div>
+        </div>
+        <div class="col-lg-12 wow fadeInUp" data-wow-duration="0.5s" data-wow-delay="0.25s">
+          <form id="contact" action="" method="post">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="contact-dec">
+                  <img src="https://www.careerindia.com/img/2019/10/tnpsc-1570097230.jpg" alt="">
+                </div>
+              </div>
+              <div class="col-lg-5">
+                
+              </div>
+              <div class="col-lg-12">
+                <div class="fill-form">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="info-post">
+                        <div class="icon">
+                          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png" alt="">
+                          <a href="https://telegram.me/tnpscmyguruplus">Telegram Group</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="info-post">
+                        <div class="icon">
+                          <img src=" {% static 'assets/images/email-icon.png' %} " alt="">
+                          <a href="https://telegram.me/mgpadmin3">Chat With Us</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="info-post">
+                        <div class="icon">
+                          <img src="https://img.freepik.com/premium-photo/round-instagram-logo-isolated-white-background_469489-1037.jpg?size=338&ext=jpg&ga=GA1.1.1448711260.1707091200&semt=ais" alt="">
+                          <a href="https://instagram.com/tnpsc_myguruplus?igshid=MmU2YjMzNjRlOQ==">Instagram </a>
+                        </div>
+                      </div>
+                    </div>
+                    {% comment %} <form action="{% url 'submit_contact_form' %}" method="post">
+                      {% csrf_token %}
+                      <div class="col-lg-6">
+                        <fieldset>
+                          <input type="name" name="name" id="name" placeholder="Name" autocomplete="on" >
+                        </fieldset>
+                        <fieldset>
+                          <input type="text" name="email" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email" >
+                        </fieldset>
+                        <fieldset>
+                          <input type="subject" name="subject" id="subject" placeholder="Subject" autocomplete="on">
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-6">
+                        <fieldset>
+                          <textarea name="message" type="text" class="form-control" id="message" placeholder="Message" ></textarea>  
+                        </fieldset>
+                      </div>
+                      <div class="col-lg-12">
+                        <fieldset>
+                          <button type="submit" id="form-submit" class="main-button ">Send Message Now</button>
+                        </fieldset>
+                      </div>
+                    </form> {% endcomment %}
+                    </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Copyright Â© 2023 Myguruplus, Ltd. All Rights Reserved. 
+          <br>Design: <a href="https://templatemo.com" target="_parent" title="free css templates">TemplateMo</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+
+  <!-- Scripts -->
+  <script src=" {% static 'vendor/jquery/jquery.min.js' %} "></script>
+  <script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %} "></script>
+  <script src=" {% static 'assets/js/owl-carousel.js' %} "></script>
+  <script src=" {% static 'assets/js/animation.js' %} "></script>
+  <script src=" {% static 'assets/js/imagesloaded.js' %} "></script>
+  <script src=" {% static 'assets/js/custom.js' %} "></script>
+
+  <script>
+    let currentRating = 0;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.star');
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseover', () => highlightStars(index));
+            star.addEventListener('mouseout', () => unhighlightStars());
+            star.addEventListener('click', () => rateCourse(index + 1));
+        });
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quiz Builder</title>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-GLhlTQ8iB6bzT9tVaP5j+C9zPHNXpU9C/WH1R8iK8eZLl/6U5UZBtXQ5stwE5P1C" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    
+</head>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+    
+    h2 {
+        color: #007bff;
+    }
+    
+    form {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        font-weight: bold;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        margin-top: 6px;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+    
+    .btn {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.25rem;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    
+    .btn-primary {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    
+    .btn-success {
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .btn-danger {
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+    
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+    }
+    
+    .checkbox-label input {
+        margin-right: 6px;
+    }
+    
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+    
+    .mt-5 {
+        margin-top: 3rem;
+    }
+    
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+    
+    .textarea-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+    
+    .textarea-container p {
+        display: none;
+        margin-top: 5px;
+    }
+    
+    .textarea-container button {
+        margin-top: 5px;
+    }
+    
+    .quiz-data-buttons {
+        margin-bottom: 20px;
+    }
+    
+    /* Improved alignment for checkboxes */
+    .question-checkbox {
+        margin-right: 6px;
+        align-self: center;
+    }
+    
+    /* Improved alignment for buttons */
+    button {
+        margin-right: 8px;
+    }
+    
+    /* Centered displayContent */
+
+    
+    /* Style for Submit Quiz button */
+    .btn-submit-quiz {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .btn-submit-quiz:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+        color: #fff;
+    }
+    
+    /* Style for Open and Close buttons */
+    button.open-btn, button.close-btn {
+        background-color: #007bff;
+        color: #fff;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+    
+    button.open-btn:hover, button.close-btn:hover {
+        background-color: #0056b3;
+    }
+    
+    button.close-btn {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    
+    button.close-btn:hover {
+        background-color: #c82333;
+    }
+
+    #select_q{
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+    /* Style for checkboxes */
+.question-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+}
+
+.question-checkbox:checked {
+    background-color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.question-checkbox:after {
+    content: '\2713';
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    display: none;
+}
+
+.question-checkbox:checked:after {
+    display: block;
+}
+/* Style for options container, input, and delete button */
+.optionsContainer {
+    border: 1px solid #a4a4a4;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.optionsContainer .mb-3 {
+    margin-bottom: 15px;
+}
+
+.optionsContainer label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.optionsContainer input[type="text"] {
+    width: calc(100% - 32px);
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.optionsContainer button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.optionsContainer button:hover {
+    background-color: #c82333;
+}
+#option_val{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#option_icon{
+    width: 18px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -1px;
+
+}
+
+.displayContent{
+    border: 2px solid #d4d4d4;
+    padding: 2px 22px;
+    border-radius: 3px;
+
+}
+
+/* Add this CSS to your stylesheet or in a style tag in your HTML */
+
+/* Style for the container */
+.container_mb {
+    position: relative;
+    display: flex;
+    gap: 2%;
+    justify-content: flex-start;
+}
+
+/* Style for the select element */
+.form-select {
+    width: 100%; /* Full width */
+    padding: 0.375rem 0.75rem; /* Adjust as needed */
+    font-size: 1rem; /* Adjust as needed */
+    line-height: 1.5;
+    border-radius: 0.25rem; /* Adjust as needed */
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Style for the arrow icon */
+.form-select::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0.75rem; /* Adjust as needed */
+    transform: translateY(-50%);
+    pointer-events: none;
+    border-style: solid;
+    border-width: 0.3em 0.3em 0;
+    border-color: #495057 transparent transparent transparent;
+}
+
+/* Style for the focus state */
+.form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+    
+</style>
+<body>
+    <nav style="position: sticky; top: 0; z-index: 999;" class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <button type="submit" class="btn btn-primary" onclick="submit_data()">Submit Quiz</button>
+                </li>
+                <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                    </a>
+                    <div class="dropdown-menu" style="" aria-labelledby="navbarDropdown">
+                        <button type="button" style="border-radius: 7px; background: #f7f8f8; border: 2px solid #d6d6d6; font-size: 11px; width: 100%;" onclick="copySelectedQuestions()">Copy Selected Questions</button>
+                        {% comment %} <button type="button" style="border-radius: 7px; background: #f7f8f8; border: 2px solid #d6d6d6; font-size: 11px; width: 100%;" onclick="pasteCopiedQuestions()">Paste Copied Questions</button> {% endcomment %}
+                        <div class="dropdown-divider"></div>
+                        <button type="button" style="border-radius: 7px; background: #f7f8f8; color:black; border: 2px solid #d6d6d6; font-size: 11px; width: 100%;" class="btn btn-primary" onclick="getQuizData1()">Get Quiz Data (JSON)</button>    
+                    </div>
+                </li>--> 
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="{% url 'list_folders' path='root' %}">Root</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="{% url 'create_config' path=path %}">Set Timmer</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <a href="{% url 'list_folders' path=path %}">
+                    <button class="btn btn-outline-danger my-2 my-sm-0" type="button">Back</button>
+                </a>
+            </form>
+        </div>
+    </nav>
+<div class="container mt-5">
+    <h2>Paragraph Type</h2>
+
+    <!-- Instructions input -->
+    <div class="mb-4">
+        <label for="quizInstructions" class="form-label">Paragraph:</label>
+        <textarea class="form-control" id="quizInstructions" name="quizInstructions" oninput="updateContent()" rows="4"></textarea>
+    </div>
+
+    <div id="questionsContainer">
+        <!-- At least one empty question input and options -->
+        <div class="mb-4" id="questionContainer1">
+            <div id="select_q">
+                <h4>Question 1:</h4>
+                <input type="checkbox" class="question-checkbox" id="questionCheckbox1">
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" id="question1" name="questions1" required> </textarea>
+            </div>
+
+
+            <div>
+                <button onclick="openTextarea(1)">Open</button>
+                <button onclick="closeTextarea(1)">Close</button>
+                <div id="displayContent1" class="displayContent" style="display:none"></div>
+            </div>
+
+            <div id="optionsContainer1" class="optionsContainer mb-3">
+                <div class="mb-3" id="optionContainer11">
+                   
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary mb-3" onclick="addOption(1)">Add Option</button>
+
+            <div class="container_mb">
+                <label for="correctAnswer1" class="form-label">Correct Answer</label>
+                <select class="form-select" id="correctAnswer1" name="correctAnswers[]" required>
+                    <!-- Options will be dynamically added -->
+                </select>
+                <button type="button" class="btn btn-danger" onclick="deleteQuestion(1)">Delete Question</button>
+            </div>
+
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-success mb-3" onclick="addQuestion()">Add New Question</button>
+
+    <div class="mb-3">  
+        <!-- Add this button where you want to trigger the import -->
+
+        <!-- The modal structure -->
+        <div class="modal fade" id="importQuestionsModal" tabindex="-1" role="dialog" aria-labelledby="importQuestionsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importQuestionsModalLabel">Import Questions Hierarchy</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        sample
+                        <!-- Display the hierarchy/div structure here -->
+                        <pre id="questionsHierarchy"></pre>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <form>
+        {% csrf_token %}
+        <!-- Your form fields and other content go here -->
+    </form>
+</div>
+
+<script>
+    let questionCount = 1;
+    var question_id = [];
+    var selectedQuestions = [];
+    var clipboardData;
+    var editor_obj = {}
+
+    //...............................................update instructions...................................................................
+    var editor_inst = CKEDITOR.replace('quizInstructions', {
+        removePlugins: 'sourcearea',
+        removeButtons: 'PasteFromWord',
+        filebrowserBrowseUrl: '/apps/ckfinder/3.4.5/ckfinder.html',
+        filebrowserImageBrowseUrl: '/apps/ckfinder/3.4.5/ckfinder.html?type=Images',
+        filebrowserUploadUrl: '/apps/ckfinder/3.4.5/core/connector/php/connector.php?command=QuickUpload&type=Files',
+        filebrowserImageUploadUrl: '/apps/ckfinder/3.4.5/core/connector/php/connector.php?command=QuickUpload&type=Images',
+        removeButtons: 'PasteFromWord'
+    });
+    //..................................................................................................................................
+        
+
+    var editor2 = CKEDITOR.replace('question1', {
+        removePlugins: 'sourcearea',
+        removeButtons: 'PasteFromWord',
+        filebrowserBrowseUrl: '/apps/ckfinder/3.4.5/ckfinder.html',
+        filebrowserImageBrowseUrl: '/apps/ckfinder/3.4.5/ckfinder.html?type=Images',
+        filebrowserUploadUrl: '/apps/ckfinder/3.4.5/core/connector/php/connector.php?command=QuickUpload&type=Files',
+        filebrowserImageUploadUrl: '/apps/ckfinder/3.4.5/core/connector/php/connector.php?command=QuickUpload&type=Images',
+        removeButtons: 'PasteFromWord'
+    });
+    editor_obj['question1']=editor2
+    console.log(editor_obj,editor_obj['question1'])
+    function openTextarea(id) {
+        console.log(id)
+        document.getElementById("displayContent"+id).style.display="block";
+        var ed = editor_obj[`question${id}`]
+        document.getElementById("displayContent"+id).innerHTML = ed.getData();
+    }
+    function closeTextarea(id) {
+        // Clear the content of the paragraph
+        document.getElementById("displayContent"+id).style.display="none";
+    }
+    editor2.on('change', function(ev) {
+        var textareaContent = document.getElementById("question1").value;
+        document.getElementById("displayContent1").innerHTML = editor2.getData();
+        MathJax.typeset();
+    });
+
+    
+
+    function addQuestion() {
+        questionCount++;
+
+        const questionsContainer = document.getElementById('questionsContainer');
+
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('mb-4');
+        questionDiv.id = `questionContainer${questionCount}`;
+        question_id.push(`questionContainer${questionCount}`);
+        questionDiv.innerHTML = `
+            <div id="select_q">
+                <h4>Question ${questionCount}:</h4>
+                <input type="checkbox" class="question-checkbox" id="questionCheckbox${questionCount}">
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" id="question${questionCount}" name="questions[]" required> </textarea>
+            </div>
+
+            <div>
+                <button onclick="openTextarea(${questionCount})">Open</button>
+                <button onclick="closeTextarea(${questionCount})">Close</button>
+                <p id="displayContent${questionCount}" class='displayContent' style="display:none"></p>
+            </div>
+
+            <div class="mb-3" id="optionsContainer${questionCount}">
+            </div>
+
+            <button type="button" class="btn btn-primary mb-3" onclick="addOption(${questionCount})">Add Option</button>
+
+            <div class="container_mb">
+                <label for="correctAnswer${questionCount}" class="form-label">Correct Answer</label>
+                <select class="form-select" id="correctAnswer${questionCount}" name="correctAnswers[]" required>
+                    <!-- Options will be dynamically added -->
+                </select>
+                <button type="button" class="btn btn-danger" onclick="deleteQuestion(${questionCount})">Delete Question</button>
+            </div>
+
+        `;
+
+        questionsContainer.appendChild(questionDiv);
+
+        // Add default option for the new question
+        addOption(questionCount);
+        var editor_objs = CKEDITOR.replace(`question${questionCount}`, {
+            removePlugins: 'sourcearea',
+            removeButtons: 'PasteFromWord',
+            filebrowserBrowseUrl: '/apps/ckfinder/3.4.5/ckfinder.html',
+            filebrowserImageBrowseUrl: '/apps/ckfinder/3.4.5/ckfinder.html?type=Images',
+            filebrowserUploadUrl: '/apps/ckfinder/3.4.5/core/connector/php/connector.php?command=QuickUpload&type=Files',
+            filebrowserImageUploadUrl: '/apps/ckfinder/3.4.5/core/connector/php/connector.php?command=QuickUpload&type=Images',
+            removeButtons: 'PasteFromWord'
+        });
+        editor_obj[`question${questionCount}`]=editor_objs
+        editor_objs.on('change', function(ev) {
+            var textareaContent = document.getElementById(`question${questionCount}`).value;
+            console.log(textareaContent)
+            document.getElementById(`displayContent${questionCount}`).innerHTML = editor_objs.getData();
+            MathJax.typeset();
+        });
+        
+    }
+
+    function addOption(questionNumber) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionNumber}`);
+        const optionCount = optionsContainer.querySelectorAll('input').length + 1;
+
+        const optionInput = document.createElement('div');
+        optionInput.classList.add('mb-3');
+        optionInput.classList.add('optionsContainer');
+        optionInput.id = `optionContainer${questionNumber}${optionCount}`;
+        optionInput.innerHTML = `
+            <label for="option${questionNumber}${optionCount}" class="form-label">Option ${optionCount}:</label>
+            <div id='option_val'>
+                <input type="text" class="form-control" id="option${questionNumber}${optionCount}" name="options[]" required>
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteOption(${questionNumber}, ${optionCount})"><img id="option_icon" src="https://cdn-icons-png.flaticon.com/512/7709/7709786.png"/></button>
+            </div>
+                `;
+
+        optionsContainer.appendChild(optionInput);
+
+        // Add the new option to the correct answer dropdown
+        const correctAnswerDropdown = document.getElementById(`correctAnswer${questionNumber}`);
+        const newOption = document.createElement('option');
+        newOption.text = `Option ${optionCount}`;
+        newOption.value = `option${optionCount}`;
+        correctAnswerDropdown.add(newOption);
+
+        // Enable the correct answer dropdown
+        correctAnswerDropdown.removeAttribute('disabled');
+    }
+
+    function deleteOption(questionNumber, optionNumber) {
+        const optionContainer = document.getElementById(`optionContainer${questionNumber}${optionNumber}`);
+        optionContainer.remove();
+        updateCorrectAnswerDropdown(questionNumber);
+    }
+
+    function deleteQuestion(questionNumber) {
+        const questionContainer = document.getElementById(`questionContainer${questionNumber}`);
+        questionContainer.remove();
+        updateCorrectAnswerDropdown(questionNumber);
+    }
+
+    function updateCorrectAnswerDropdown(questionNumber) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionNumber}`);
+        const correctAnswerDropdown = document.getElementById(`correctAnswer${questionNumber}`);
+    
+        if (optionsContainer && correctAnswerDropdown) {
+            correctAnswerDropdown.innerHTML = '';
+    
+            const optionInputs = optionsContainer.querySelectorAll('input');
+    
+            optionInputs.forEach((input, index) => {
+                const optionValue = input.id;
+                const optionText = `Option ${index + 1}`;
+                const newOption = document.createElement('option');
+                newOption.text = optionText;
+                newOption.value = optionValue;
+                correctAnswerDropdown.add(newOption);
+            });
+    
+            if (optionInputs.length === 0) {
+                correctAnswerDropdown.setAttribute('disabled', 'disabled');
+            }
+        }
+    }
+
+    function getQuizData() {
+        const quizData = {
+            instructions: editor_inst.getData(),
+            questions: []
+        };
+    
+        const questionsContainer = document.getElementById('questionsContainer');
+        const questionDivs = questionsContainer.querySelectorAll('[id^="questionContainer"]');
+        
+        questionDivs.forEach((questionDiv, questionIndex) => {
+            const questionData = {
+                question: editor_obj[`question${questionDiv.id.at(-1)}`].getData(),
+                options: [],
+                correctAnswer: document.getElementById(`correctAnswer${questionDiv.id.at(-1)}`).value
+            };
+    
+            const optionsContainer = questionDiv.querySelector(`#optionsContainer${questionDiv.id.at(-1)}`);
+            const optionInputs = optionsContainer.querySelectorAll('[id^="option"]');
+            console.log(optionInputs)
+            optionInputs.forEach((optionInput) => {
+                if(optionInput.value !== undefined){
+                    questionData.options.push(optionInput.value);
+                }
+            });
+    
+            quizData.questions.push(questionData);
+        });
+    
+        // Display the JSON data in the console
+        console.log(JSON.stringify(quizData, null, 2));
+        return quizData
+    }
+    function getQuizData1() {
+        const quizData = {
+            instructions: editor_inst.getData(),
+            questions: []
+        };
+    
+        const questionsContainer = document.getElementById('questionsContainer');
+        const questionDivs = questionsContainer.querySelectorAll('[id^="questionContainer"]');
+        
+        questionDivs.forEach((questionDiv, questionIndex) => {
+            try{
+                const questionData = {
+                    id: document.getElementById(`id_${questionDiv.id.at(-1)}`).value,
+                    question: editor_obj[`question${questionDiv.id.at(-1)}`].getData(),
+                    options: [],
+                    correctAnswer: document.getElementById(`correctAnswer${questionDiv.id.at(-1)}`).value
+                };
+        
+                const optionsContainer = questionDiv.querySelector(`#optionsContainer${questionDiv.id.at(-1)}`);
+                const optionInputs = optionsContainer.querySelectorAll('[id^="option"]');
+        
+                optionInputs.forEach((optionInput) => {
+                    if(optionInput.value !== undefined){
+                        questionData.options.push(optionInput.value);
+                    }
+                });
+        
+                quizData.questions.push(questionData);
+            }catch{
+                console.log('err')
+            }
+        });
+    
+        // Display the JSON data in the console
+        console.log(JSON.stringify(quizData, null, 2));
+        alert(JSON.stringify(quizData, null, 2))
+        return quizData
+    }
+
+
+    function copySelectedQuestions() {
+        selectedQuestions = [];
+        selectedQuestionsTex = [];
+        const checkboxes = document.querySelectorAll('.question-checkbox:checked');
+        checkboxes.forEach((checkbox) => {
+            const questionIndex = checkbox.id.replace('questionCheckbox', '');
+            let a = copyQuestion(questionIndex);
+            selectedQuestions.push(questionIndex);
+            selectedQuestionsTex.push(a);
+        });
+        console.log(selectedQuestionsTex)
+        copyToClipboard(selectedQuestionsTex.toString())
+
+        // Copy to clipboard
+    }
+
+    function copyQuestion(questionIndex) {
+        const sourceQuestion = document.getElementById(`question${questionIndex}`).value;
+        const sourceOptions = Array.from(document.querySelectorAll(`#optionsContainer${questionIndex} [id^="option"]`)).map(input => input.value);
+        const sourceCorrectAnswer = document.getElementById(`correctAnswer${questionIndex}`).value;
+
+        // Store the copied data in a temporary variable
+        window.copiedQuestion = {
+            question: editor_obj[`question${questionIndex}`].getData(),
+            options: sourceOptions,
+            correctAnswer: sourceCorrectAnswer
+        };
+        console.log(window.copiedQuestion)
+        return JSON.stringify(window.copiedQuestion)
+    }
+
+    function copyToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+    }
+    async function readClipboardData() {
+        try {
+          const text = await navigator.clipboard.readText();
+          console.log("Copied text:", text);
+        } catch (err) {
+          console.error("Failed to read clipboard:", err);
+        }
+    }
+
+    async function pasteCopiedQuestions() {
+        // Retrieve from clipboard
+        let clipboardData = await readClipboardData();
+        console.log(clipboardData);
+    }
+
+
+    function submit_data() {
+        // Additional data
+        const csrfToken = "{{ csrf_token }}";
+        const path = "{{ path }}";
+        const additionalData = {
+            csrfmiddlewaretoken: csrfToken,  // Include CSRF token if needed
+            category: 'sample',  // Add any other key-value pairs
+            path: path
+        };
+    
+        // Combine JSON data and additional data
+        const combinedData = { ...getQuizData(), ...additionalData };
+        console.log(combinedData)
+    
+        // AJAX request using fetch with a POST method
+        fetch('/update_para_db', {
+            method: 'POST',  // Use POST method
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any other headers as needed
+            },
+            body: JSON.stringify(combinedData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                window.location.replace("/para_edit_question/"+data.path+"/"+data.u_id);
+                // Handle success response from the server
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error response from the server
+            });
+    }
+</script>
+
+</body>
+</html>
+
+
+
+

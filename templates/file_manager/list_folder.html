@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Folders</title>
+</head>
+<body>
+
+  <h2>List of Folders</h2>
+
+  <ul>
+    {% for folder in folders %}
+      <li>
+        <strong>Folder Name:</strong> {{ folder.FolderName }}<br>
+        <strong>Category:</strong> {{ folder.category }}<br>
+        <!-- Add more fields as needed -->
+      </li>
+    {% endfor %}
+  </ul>
+
+</body>
+</html>

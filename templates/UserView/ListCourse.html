@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>All Quizzes - Myguruplus</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+		<nav class="navbar bg-body-tertiary">
+			<div class="container">
+				<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between" style="    width: 100%;">
+					<div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; align-items: center;">
+						<div class="navbar-brand">
+							<img style="width:35px" src="https://github.com/NagiPragalathan/GeeksforGeeks_files/blob/main/MYGURUPLUS_LOGO.png?raw=true" />
+							<a  href="{% url 'home' %}" class="navbar-brand" style="font-weight: bold;">MyGuruPlus</a>
+						</div>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+					</div>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav mr-auto">
+							<li class="nav-item active">
+								<a class="nav-link" href="{% url 'home' %}">Home</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'about_us' %}" style="width: 80px;">About us</a>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Others
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{% url 'disclaimer' %}">Disclaimer</a>
+									<a class="dropdown-item" href="{% url 'private_policy' %}">Private Policy</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="{% url 'return_and_refund' %}">Return and Refund</a>
+									<a class="dropdown-item" href="{% url 'terms_and_condition' %}">Terms and Condition</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</nav>
+	
+	
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		
+				</ul>
+				<div class="d-flex" role="search" style="gap: 10px;">
+					<a href="{% url 'logout' %}"><button class="btn btn-outline-danger" type="submit">Logout</button></a>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<h1 class="display-4 text-center my-5" style="font-size: 40px;font-family: Helvetica, Sans-serif;color: #1d7de3;border: black;font-weight: 800;">Our Courses</h1>
+
+
+
+	<div class="container">
+		<div class="d-flex">
+			<a class="btn btn-light me-2" style="font-family: Helvetica,Sans-serif;color:black; background: #e4e4e4;" href="{% url 'list_course' path %}">All courses</a>
+			<a class="btn btn-light me-2" style="font-family: Helvetica,Sans-serif;color:black; background: #e4e4e4;" href="{% url 'view_course' path=path type='enrolled' %}" >Enrolled courses</a>
+			<a class="btn btn-light me-2" style="font-family: Helvetica,Sans-serif;color:black; background: #e4e4e4;" href="{% url 'view_course' path=path type='free' %}" >Free courses</a>
+		</div>
+		<hr/>
+	</div>
+
+	<div class="container" style="margin-bottom: 20px;">
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+			{% for i in premium %}
+            <div class="col">
+                <div class="card shadow-sm h-100">
+						<img src="{{ i.FolderImage.url }}" style="padding: 15px; border-radius: 25px;" />
+                    <div class="card-body d-flex flex-column">
+                        <h4>{{ i.FolderName }}</h4>
+						<div class="rating-container" style="margin-bottom: 10px;">
+							{% for j in star %}
+								{% if j > i.rating %}
+									<span class="star" id="star-{{ j }}" data-rating="{{ i.rating }}" style="color: transparent;text-shadow: 0 0 0 #9d9d9d;">⭐</span>
+								{% elif i.rating != None %}
+									<span class="star" id="star-{{ j }}" data-rating="{{ i.rating }}">⭐</span>
+								{% else %}
+									<span class="star" id="star-{{ j }}" data-rating="{{ i.rating }}" style="color: transparent;text-shadow: 0 0 0 #9d9d9d;">⭐</span>
+								{% endif %}
+							{% endfor %}
+						</div>
+						{% if i.cost == 0 %}
+                        <p class="card-text" style="border: 1px solid #a2a2a2; width: fit-content; padding: 1px 13px; background: #c2ffe0; border-radius: 11px;">Free</p>
+						{% else %}
+						<div style="display: flex; align-items: center; gap: 10px; justify-content: flex-start;">
+							<p class="card-text" style="border: 1px solid #aec8c8; width: fit-content; padding: 1px 13px; background: #caf0ff; border-radius: 11px; margin:0px;">Owned</p>
+							<p class="card-text" style="border: 1px solid #aec8c8; width: fit-content; padding: 1px 13px; background: #dff2e4; border-radius: 11px;">{{ i.validity_days }}/Days</p>
+						</div>
+						{% endif %}
+                        <p class="card-text" style="text-align: justify;">{{ i.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div class="btn-group">
+                                	<a href="/list_course/root.{{ i.FolderName }}" type="button" class="btn btn-sm btn-outline-success">Take step</a>
+                            </div>
+                            <small class="text-body-secondary">{{ i.updated_date }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+		</div>
+		<hr>
+
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
+            {% for i in folders %}
+            <div class="col">
+                <div class="card shadow-sm h-100">
+						<img src="{{ i.FolderImage.url }}" style="padding: 15px; border-radius: 25px;" />
+                    <div class="card-body d-flex flex-column">
+                        <h4>{{ i.FolderName }}</h4>
+						<div class="rating-container" style="margin-bottom: 10px;">
+							{% for j in star %}
+								{% if j > i.rating %}
+									<span class="star" id="star-{{ j }}" data-rating="{{ i.rating }}" style="color: transparent;text-shadow: 0 0 0 #9d9d9d;">⭐</span>
+								{% elif i.rating != None %}
+									<span class="star" id="star-{{ j }}" data-rating="{{ i.rating }}">⭐</span>
+								{% else %}
+									<span class="star" id="star-{{ j }}" data-rating="{{ i.rating }}" style="color: transparent;text-shadow: 0 0 0 #9d9d9d;">⭐</span>
+								{% endif %}
+							{% endfor %}
+						</div>
+						{% if i.cost == 0 %}
+                        <p class="card-text" style="border: 1px solid #a2a2a2; width: fit-content; padding: 1px 13px; background: #c2ffe0; border-radius: 11px;">Free</p>
+						{% else %}
+						<div style="display: flex; align-items: center; gap: 10px; justify-content: flex-start;">
+							<p class="card-text" style="border: 1px solid #a2a2a2; width: fit-content; padding: 1px 13px; background: #e2e2e2; border-radius: 11px; margin:0px">{{ i.cost }} ₹</p>
+							<p class="card-text" style="border: 1px solid #aec8c8; width: fit-content; padding: 1px 13px; background: #dff2e4; border-radius: 11px;">{{ i.validity_days }}/Days</p>
+						</div>
+						{% endif %}
+                        <p class="card-text" style="text-align: justify;">{{ i.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div class="btn-group">
+								{% if i.cost == 0 %}
+                                	<a href="/list_course/root.{{ i.FolderName }}" type="button" class="btn btn-sm btn-outline-success">Take step</a>
+								{% else %}
+
+                                	<a href="{% url 'cost_course' i.id %}" type="button" style="font-size: 13px;" class="btn btn-sm btn-outline-success">Upgrade Premium</a>
+								{% endif %}
+                            </div>
+                            <small class="text-body-secondary">{{ i.updated_date }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const selectedRating = parseFloat(document.querySelector('.selected-rating').value);
+				const stars = document.querySelectorAll('.star');
+				
+				stars.forEach(star => {
+					const rating = parseFloat(star.dataset.rating);
+					if (rating <= selectedRating) {
+						star.style.color = 'orange';
+						star.style.textShadow = 'none';
+					}
+				});
+			});
+			
+			</script>
+			
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+		crossorigin="anonymous"></script>
+</body>
+
+	
+</html>

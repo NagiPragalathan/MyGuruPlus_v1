@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-WtKWApZd7O5Z3VNGOeR29NCNCP02W06nq8j2hiqZJq/dkNJpyh/4SyKlts1QImfocuc5p2spSEOnZUzBQRDCqQ==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-0UnV/DSFeHKziIWgbIS6E4Jy8CYu32/xpguP6NkYq6krBBlMzmvp/c3Bx3P6v5Es/u3hDc7eFVrEE5/9f9a6pw==" crossorigin="anonymous" />
+  <title>Test Instructions</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #b70ed5;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .icon {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .btn-primary, .btn-secondary {
+      margin-top: 20px;
+    }
+
+    .btn-primary {
+      background-color: #b70ed5;
+      border-color: #b70ed5;
+    }
+
+    .btn-primary:hover {
+      background-color: #933d92;
+      border-color: #933d92;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background-color: #495057;
+      border-color: #495057;
+    }
+
+    ol {
+      margin-bottom: 20px;
+    }
+
+    ol li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="text-center">
+    <i class="fas fa-info-circle icon"></i>
+    <h2>Test Instructions</h2>
+  </div>
+  <p>Welcome to the test! Before you begin, please carefully read and follow the instructions below:</p>
+
+    {{ instructions|safe }}
+    
+
+  <div class="text-center">
+    <a href="/take_quiz/{{ path }}" class="btn btn-primary">Start Test</a>
+    <a href="/list_course/{{ path }}" class="btn btn-secondary">Cancel</a>
+  </div>
+</div>
+
+</body>
+</html>

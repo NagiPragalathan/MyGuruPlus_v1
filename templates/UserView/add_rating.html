@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Rating</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f3f3f3;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #ratingContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .star {
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .star:hover,
+        .star.active {
+            color: orange;
+            transform: scale(1.2);
+        }
+
+        #updateButton {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #updateButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Update Rating</h1>
+    <div id="ratingContainer">
+        <input type="hidden" id="selectedRating" name="rating">
+        <span class="star" data-rating="1">☆</span>
+        <span class="star" data-rating="2">☆</span>
+        <span class="star" data-rating="3">☆</span>
+        <span class="star" data-rating="4">☆</span>
+        <span class="star" data-rating="5">☆</span>
+    </div>
+    <button id="updateButton" onclick="updateRating()">Update Rating</button>
+
+    <script>
+        let selectedRating = null;
+
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-rating'));
+                highlightStars();
+            });
+
+            star.addEventListener('mouseover', () => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                highlightStars(rating);
+            });
+
+            star.addEventListener('mouseout', () => {
+                highlightStars(selectedRating);
+            });
+        });
+
+        function highlightStars(hoverRating = 0) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (hoverRating === 0 || index < hoverRating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateRating() {
+            if (selectedRating !== null) {
+                document.getElementById('selectedRating').value = selectedRating;
+                // Simulate form submission (replace this with actual form submission)
+                console.log('Rating updated to:', selectedRating);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>market-wp.com</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <style>
+    body {
+      text-align: center;
+      padding: 40px 20px;
+      background: #F0F2F5; /* Update background color */
+      font-family: "Nunito Sans", sans-serif;
+    }
+    #oopss {
+      background: #E57373; /* Update background color */
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      line-height: 1.5em;
+      z-index: 9999;
+    }
+    #oopss #error-text {
+      font-size: 24px; /* Update font size */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Shabnam', Tahoma, sans-serif;
+      color: #FFFFFF; /* Update text color */
+      direction: rtl;
+    }
+    #oopss #error-text img {
+      margin: 20px auto; /* Update margin */
+      height: 120px; /* Update height */
+    }
+    #oopss #error-text span {
+      font-size: 2em; /* Update font size */
+      font-weight: 900;
+      margin-bottom: 20px; /* Update margin */
+    }
+    #oopss #error-text p {
+      font-size: 18px; /* Update font size */
+      margin: 10px 0; /* Update margin */
+    }
+    #oopss #error-text .back {
+      background: #FFFFFF; /* Update button background color */
+      color: #E57373; /* Update button text color */
+      font-size: 18px; /* Update button font size */
+      text-decoration: none;
+      padding: 10px 20px; /* Update button padding */
+      border-radius: 30px;
+      font-weight: 900;
+      transition: all 300ms ease;
+    }
+    #oopss #error-text .back:hover {
+      background-color: #FFFFFF; /* Update button background color on hover */
+      color: #B71C1C; /* Update button text color on hover */
+    }
+  </style>
+</head>
+<body>
+
+<div id='oopss'>
+  <div id='error-text'>
+    <img src="https://cdn.rawgit.com/ahmedhosna95/upload/1731955f/sad404.svg" alt="404">
+    <span>403 Forbidden</span>
+    <p class="p-a">Admin authentication login required.</p>
+    <p class="p-b">Please log in using admin credentials.
+      <a href='{% url 'login' %}' class="back">Back to Login</a>
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

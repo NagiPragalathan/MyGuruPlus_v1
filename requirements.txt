@@ -4,3 +4,4 @@ django-cors-headers
 django-ckeditor 
 django-filebrowser
 razorpay
+pyOpenSSL

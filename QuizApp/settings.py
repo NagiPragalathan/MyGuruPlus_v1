@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'ckeditor',
     'filebrowser',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'django_extensions'
 ]
+
+SECURE_SSL_REDIRECT = True
 
 CKEDITOR_UPLOAD_PATH = 'content/ckeditor/'
 

@@ -6,3 +6,8 @@ django-filebrowser
 razorpay
 pyOpenSSL
 django-extensions
+Werkzeug
+
+# sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+# sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx-selfsigned.key -out nginx-selfsigned.crt
+#  sudo python3 manage.py runserver_plus --cert-file nginx-selfsigned_crt.crt --key-file nginx-selfsigned_key.key 0.0.0.0:443

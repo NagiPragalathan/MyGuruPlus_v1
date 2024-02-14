@@ -28,7 +28,11 @@ def home(request):
     if request.user.is_superuser:
         return redirect('list_folders', path='root')
     else:
-        return render(request, "home/index.html", {'auth':login, 'courses':folders, 'rate':[1,2,3,4,5], 'updates':updates[0].message})
+        try:
+            return render(request, "home/index.html", {'auth':login, 'courses':folders, 'rate':[1,2,3,4,5], 'updates':updates[0].message})
+        except:
+            return render(request, "home/index.html", {'auth':login, 'courses':folders, 'rate':[1,2,3,4,5], 'updates':"🆕 Last Updates"})
+            
 def home2(request):
     folders = FolderManager.objects.filter(path='root').order_by('FolderName')[::-1]
     rating = {}

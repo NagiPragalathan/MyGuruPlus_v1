@@ -27,13 +27,13 @@ DEBUG = True
 
 # >>>>>>>>>>>>>> Hosting >>>>>>>>>>>>>>>>>>>>>>>>>>
 
-ALLOWED_HOSTS = ['myguruplus.com', '185.199.52.89']
+ALLOWED_HOSTS = ['myguruplus.com', '185.199.52.89', "127.0.0.1", "www.myguruplus.com"]
 
 CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = ['myguruplus.com']
 
-CSRF_TRUSTED_ORIGINS = ['http://myguruplus.com', 'https://myguruplus.com']
+CSRF_TRUSTED_ORIGINS = ['http://myguruplus.com', 'https://myguruplus.com', "https://www.myguruplus.com"]
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 

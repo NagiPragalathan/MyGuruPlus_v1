@@ -33,10 +33,8 @@ CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = ['myguruplus.com']
 
-CORS_ALLOWED_ORIGINS = [
-    'myguruplus.com',  # Replace with the actual port you are using
-    '185.199.52.89',
-]
+CSRF_TRUSTED_ORIGINS = ['http://myguruplus.com', 'https://myguruplus.com']
+
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # Application definition

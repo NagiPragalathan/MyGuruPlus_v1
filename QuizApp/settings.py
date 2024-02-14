@@ -25,8 +25,19 @@ SECRET_KEY = "django-insecure--h7%djp0$q6wh&k3$x@#51=1(h38d5s$iz6&c&pe2)7+(ro(4#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# >>>>>>>>>>>>>> Hosting >>>>>>>>>>>>>>>>>>>>>>>>>>
 
+ALLOWED_HOSTS = ['myguruplus.com', '185.199.52.89']
+
+CSRF_COOKIE_SECURE = True
+
+CSRF_TRUSTED_ORIGINS = ['myguruplus.com']
+
+CORS_ALLOWED_ORIGINS = [
+    'myguruplus.com',  # Replace with the actual port you are using
+    '185.199.52.89',
+]
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # Application definition
 
@@ -84,6 +95,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "QuizApp.wsgi.application"
 
 
+SECURE_SSL_REDIRECT = False
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -135,7 +148,7 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'

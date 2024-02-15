@@ -58,9 +58,11 @@ def home2(request):
     obj = Contact.objects.all()
     for i in obj:
         print(i.message, i.name)
-
-    return render(request, "home/index.html", {'auth':login, 'courses':folders, 'rate':[1,2,3,4,5],'updates':updates[0].message})
-
+    try:
+        return render(request, "home/index.html", {'auth':login, 'courses':folders, 'rate':[1,2,3,4,5],'updates':updates[0].message})
+    except:
+        return render(request, "home/index.html", {'auth':login, 'courses':folders, 'rate':[1,2,3,4,5], 'updates':"🆕 Last Updates"})
+        
 def logout_view(request):
     logout(request)
     return redirect('home')
@@ -79,3 +81,12 @@ def return_and_refund(request):
 
 def terms_and_condition(request):
     return  render(request,"Common/Terms_and_Conditions.html")
+
+def contact_us(request):
+    return  render(request,"Common/contact_us.html")
+
+def test(request):
+    return  render(request,"test.html")
+
+def test1(request):
+    return  render(request,"test1.html")

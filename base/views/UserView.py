@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from base.models import PathManager, FolderManager, McqQuestionBase, Config, UserSubscription, Comments, Rating
 from django.db.models import Count
-
+import random
 def ListCourse(request, path):
     temp = []
     temp1=[]
@@ -239,8 +239,27 @@ def take_quiz(request, path):
         Subscription_path.append(i.course_premium.split('.')[1])
     print(Subscription_path, path)
     
+    correct_shuffle=[]
+    for a,b,c,d,e in zip(questions, options, correctAnswer, question_ids, explain):
+        correct_shuffle.append([a,b,c,d,e])
+    random.shuffle(correct_shuffle)
+    print(correct_shuffle)
+    question = []
+    option = []
+    correctAnswers = []
+    question_id = []
+    explains = []
+    
+    for a,b,c,d,e in correct_shuffle:
+        question.append(a)
+        option.append(b)
+        correctAnswers.append(c)
+        question_id.append(d)
+        explains.append(e)
+        
+    
     if path.split('.')[1] in Subscription_path:
-        return render(request, "UserView/TakeQuiz.html",{'questions':questions,'options':options, 'answers':correctAnswer, 'question_ids':question_ids, "explain":explain, 'timmer':timmer, 'path':path, 'ads': False})
+        return render(request, "UserView/TakeQuiz.html",{'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path, 'ads': False})
     else:
-        return render(request, "UserView/TakeQuiz.html",{'questions':questions,'options':options, 'answers':correctAnswer, 'question_ids':question_ids, "explain":explain, 'timmer':timmer, 'path':path,'ads' : True})
+        return render(request, "UserView/TakeQuiz.html",{'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path,'ads' : True})
         

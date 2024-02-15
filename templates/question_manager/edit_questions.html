@@ -764,29 +764,37 @@
     
         const questionsContainer = document.getElementById('questionsContainer');
         const questionDivs = questionsContainer.querySelectorAll('[id^="questionContainer"]');
+
+        console.log("questionsContainer",questionsContainer, "questionDivs", questionDivs, questionDivs.length )
         
         questionDivs.forEach((questionDiv, questionIndex) => {
             try{
+                const questionNumber = questionDiv.id.match(/\d+$/)
+                console.log(`id_${parseInt(questionNumber[0])}`, `question${parseInt(questionNumber[0])}`,  )
+                console.log(questionNumber[0], parseInt(questionNumber[0]))
                 const questionData = {
-                    id: document.getElementById(`id_${questionDiv.id.at(-1)}`).value,
-                    question: editor_obj[`question${questionDiv.id.at(-1)}`].getData(),
-                    explain: editor_obj[`question_${questionDiv.id.at(-1)}`].getData(),
+                    id: document.getElementById(`id_${parseInt(questionNumber[0])}`).value,
+                    question: editor_obj[`question${parseInt(questionNumber[0])}`].getData(),
+                    explain: editor_obj[`question_${parseInt(questionNumber[0])}`].getData(),
                     options: [],
-                    correctAnswer: document.getElementById(`correctAnswer${questionDiv.id.at(-1)}`).value
+                    correctAnswer: document.getElementById(`correctAnswer${parseInt(questionNumber[0])}`).value
                 };
         
-                const optionsContainer = questionDiv.querySelector(`#optionsContainer${questionDiv.id.at(-1)}`);
+                const optionsContainer = questionDiv.querySelector(`#optionsContainer${parseInt(questionNumber[0])}`);
                 const optionInputs = optionsContainer.querySelectorAll('[id^="option"]');
         
                 optionInputs.forEach((optionInput) => {
                     if(optionInput.value !== undefined){
                         questionData.options.push(optionInput.value);
                     }
+                    else{
+                        console.log("the value is undefined !")
+                    }
                 });
         
                 quizData.questions.push(questionData);
-            }catch{
-                console.log('err')
+            }catch(e){
+                console.log('err', e)
             }
         });
     

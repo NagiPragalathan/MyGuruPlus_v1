@@ -8,7 +8,7 @@ import uuid
 import json
 from django.db.models import Count, F
 from itertools import groupby
-
+import random
 
 def add_question(request, path):
     for i in McqQuestionBase.objects.all():

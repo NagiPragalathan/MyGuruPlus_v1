@@ -1,6 +1,6 @@
 # Django  inbuilt models
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from QuizApp import settings
 import os
@@ -22,6 +22,9 @@ from base.views.Contect import *
 from base.views.Error import *
 from base.views.seo import *
 from django.conf.urls import handler403, handler404, handler500
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+from django.views.static import serve
 
 urlpatterns = []
 
@@ -37,6 +40,8 @@ handler403 = 'base.views.Error.custom_403'
 
 admin_ = [
     path('admin/', admin.site.urls),    
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 ]
 
 auth = [
@@ -165,4 +170,4 @@ urlpatterns.extend(seo)
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
+urlpatterns += staticfiles_urlpatterns()

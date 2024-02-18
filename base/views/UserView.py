@@ -2,6 +2,7 @@ from django.shortcuts import render
 from base.models import PathManager, FolderManager, McqQuestionBase, Config, UserSubscription, Comments, Rating
 from django.db.models import Count
 import random
+from .ads import ads_script
 def ListCourse(request, path):
     temp = []
     temp1=[]
@@ -276,7 +277,7 @@ def take_quiz(request, path):
         correct_ints.append(f)
         
     if path.split('.')[1] in Subscription_path:
-        return render(request, "UserView/Quiz.html",{"correct_ints":correct_ints,"correct_shuffle":correct_shuffle,'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path, 'ads': False})
+        return render(request, "UserView/Quiz.html",{"ads_script":ads_script,"correct_ints":correct_ints,"correct_shuffle":correct_shuffle,'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path, 'ads': False})
     else:
-        return render(request, "UserView/Quiz.html",{"correct_ints":correct_ints,"correct_shuffle":correct_shuffle, 'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path,'ads' : True})
+        return render(request, "UserView/Quiz.html",{"ads_script":ads_script,"correct_ints":correct_ints,"correct_shuffle":correct_shuffle, 'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path,'ads' : True})
         

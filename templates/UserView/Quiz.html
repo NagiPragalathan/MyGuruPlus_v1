@@ -151,6 +151,13 @@
     <div id="form">
         {% csrf_token %}
         {% for i in correct_shuffle %}
+            {% if ads %}
+                {% if forloop.counter0|divisibleby:10 and forloop.counter != 0 %}
+                    <div style="text-align: center; margin-top: 20px;">
+                        {{ ads_script|random|safe }}
+                    </div>
+                {% endif %}
+            {% endif %}
             <div style="display: flex; flex-direction: row; justify-content: flex-start; align-items: flex-start; width: 100%;">
                 <p>{{ forloop.counter }}. </p>
                 <div class="question">

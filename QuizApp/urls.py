@@ -46,8 +46,8 @@ common = [
     path('ad_home', home2, name='ad_home'),
     path('logout/', logout_view, name='logout'),
     path('contact_us', contact_us, name='contact_us'),
-    path('test', test, name='test'),
-    path('test1', test1, name='test1'),
+    # path('test', test, name='test'),
+    # path('test1', test1, name='test1'),
 ]
 
 file_manager = [

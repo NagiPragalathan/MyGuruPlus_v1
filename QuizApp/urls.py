@@ -39,6 +39,7 @@ auth = [
     path('signup/<str:mail>', signup, name='signup'),
     path('login', user_login, name='login'),
 ]
+
 common = [
     path('home', home, name='home'),
     path('', home, name='home'),

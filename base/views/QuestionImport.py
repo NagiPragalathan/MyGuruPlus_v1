@@ -27,7 +27,7 @@ def process_csv(request, path):
         # Print CSV data to console
         for row in csv_data:
             print(row)
-        for data in csv_data:
+        for data in csv_data: 
             print(Instructions)                     # _/
             print(data.get('Question'))             # _/
             print(data.get('Explanation'))          # _/

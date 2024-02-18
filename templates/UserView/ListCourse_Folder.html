@@ -172,7 +172,7 @@
 			{% if mcq %}
 			<div class="mb-10 sm:w-91 md:w-93 xl:w-full pr-4 pl-4 relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300 shadow-none">
 				<div class="flex-col p-6" style="display: flex; flex-direction: row; align-items: center; gap: 25px; justify-content: space-between;">
-					<h5 class="text-center">This Folder has a Quiz. You can attend!</h5>
+					<h5 class="text-center">This Folder has a Quiz "<span style="background: #dddddd; padding: 2px 12px; border-radius: 8px;">{{ test_name }}</span>". You can attend!</h5>
 					<a href="/show_instructions/{{ path }}"><button class="btn btn-primary">Quiz</button></a>
 				</div>
 			</div>

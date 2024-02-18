@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Meera+Inimai&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: "Meera Inimai", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #timer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 16px;
+            z-index: 1000; /* Ensure it appears above other content */
+        }
+
+        #form {
+            margin: 60px auto 20px; /* Adjusted margin to accommodate the fixed timer */
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            margin-left: 10px;
+        }
+
+        .question:nth-child(even) {
+            background-color: #e9e9e9;
+        }
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: row;        
+            background-color: #f9f9f9;
+        }
+        .option-item:hover{
+            background:#e2f0ff;
+        }
+
+        .option-item label {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        label {
+            display: inline-block;
+            width: calc(100% - 25px); /* Adjusted width to accommodate radio button */
+        }
+
+        input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .toggle-btn {
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .question-paragraph {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="timer">Timer: <span id="countdown">00:00:00</span></div>
+    <div class="header" style="text-align: center;margin-top: 10%;">
+        <h1 class="display-4 fw-bold" style="margin-bottom: 10px;">Myguruplus Practice</h1>
+        <p class="fs-5" style="margin-bottom: 0;">These are model questions to Crack the TNPSC.</p>
+    </div>
+    
+    <div id="form">
+        {% csrf_token %}
+        {% for i in correct_shuffle %}
+            <div style="display: flex; flex-direction: row; justify-content: flex-start; align-items: flex-start; width: 100%;">
+                <p>{{ forloop.counter }}. </p>
+                <div class="question">
+                    {% if i.0|length == 2 %}
+                        <div>
+                            <p>The is Comprehension question</p>
+                            <button class="toggle-btn" id="btn_{{ forloop.counter }}" onclick="toggle('btn_{{ forloop.counter }}','inst_{{ forloop.counter }}')">Open</button>
+                        <div>
+
+                        <div class="question-paragraph" id="inst_{{ forloop.counter }}">{{ i.0.0|safe }}</div> <!-- Question -->
+                        <p class="question-text">{{ i.0.1|safe }}</p> <!-- Question -->
+                    {% else %}
+                        <!-- Question paragraph -->
+                        <p class="question-text">{{ i.0|safe }}</p> <!-- Question -->
+                    {% endif %}
+                    <!-- Options list -->
+                    <ul class="options">
+                        {% for option in i.1 %}
+                            <!-- Option item -->
+                            <li class="option-item">
+                                <input type="radio" id="{{ i.3 }}_{{ forloop.counter }}" name="answer_{{ i.3 }}" value="{{ forloop.counter }}">
+                                <label for="{{ i.3 }}_{{ forloop.counter }}">{{ option }}</label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+        <input type="hidden" name="path" value="{{ path }}">
+        <input type="submit" value="Submit" onclick="submitForm()">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+
+
+    <script>
+        //------------------------------------------------------------------
+        {% comment %} $(document).ready(function() {
+            $('body').bind('cut copy', function(e) {
+                e.preventDefault();
+              });
+          });
+          $(document).ready(function() {
+            $("body").on("contextmenu", function(e) {
+                return false;
+              });
+          }); {% endcomment %}
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+        window.onbeforeunload = function(event)
+        {
+            return confirm("Confirm refresh");
+        };
+        //----------------------------------------------------------------------------------------
+
+        function submitForm() {
+            var data = [];
+        
+            {% for i in correct_shuffle %}
+                var question = `{{ i.0|safe }}`;
+                var correctAnswer = `{{ i.2|safe }}`;
+                var explain = `{{ i.4|safe }}`;
+                var correct_ints="{{ i.5 }}"
+        
+                var optionsList = [];
+                {% for option in i.1 %}
+                    optionsList.push(`{{ option }}`);
+                {% endfor %}
+        
+                // var selectedOption = document.querySelector('input[name="answer_{{ i.3 }}"]:checked');
+                // var selectedAnswer = selectedOption ? selectedOption.parentElement.textContent.trim() : null;
+                var selectedOption = document.querySelector('input[name="answer_{{ i.3 }}"]:checked');
+                var selectedAnswer = selectedOption ? selectedOption.value : null;
+
+                var isCorrect = selectedAnswer === correctAnswer;
+        
+                var questionData = {
+                    "question": question,
+                    "selectedAnswer": selectedAnswer,
+                    "correctAnswer": correctAnswer,
+                    "explain": explain,
+                    "options": optionsList,
+                    "correct_ints":correct_ints,
+                    "isCorrect": isCorrect
+                };
+        
+                data.push(questionData);
+            {% endfor %}
+        
+            let out_html = "";
+            let CorrectAnswers = 0;
+            let IncorrectAnswers = 0;
+            let TotalQuestions = {{ correct_shuffle|length }}
+            
+        
+            for (let i = 0; i < data.length; i++) {
+                out_html += `
+
+                    <div style="display: flex; flex-direction: row; justify-content: flex-start; align-items: flex-start; width: 100%;">
+                        <p>${i+1}. </p>
+                        <div class="question">
+                            <p class="question-text">${data[i].question}</p>
+                            <ul class="options">
+                `;
+        
+                data[i].options.forEach((option, index) => {
+                    console.log(data[i].selectedAnswer, data[i].correctAnswer,  option, data[i].correct_ints, index)
+                    let selected = parseInt(data[i].selectedAnswer);
+                    let correct_ints = parseInt(data[i].correct_ints);
+                    if(selected === correct_ints && (index+1) === selected ) {
+                        CorrectAnswers++;
+                        out_html += `<li class="option-item" style='background:#21ff44'>${option}</li>`;
+                    }else if(selected !== correct_ints && (index+1) === selected ){
+                        IncorrectAnswers++;
+                        out_html += `<li class="option-item" style='background:#ff0f12'>${option}</li>`;
+                    }else{
+                        out_html += `<li class="option-item" >${option}</li>`;
+                    }
+
+                });
+        
+                out_html += `
+                            </ul>
+                            <div style='border: 2px solid #bdbdbd; padding: 10px; border-radius: 6px; background: #d5d5d5;'><b>Selected Answer:</b> <span style="color: ${data[i].correctAnswer === data[i].selectedAnswer ? 'green' : 'red'};">${data[i].selectedAnswer}</span></div>
+                            <div style='margin-top: 10px;border: 2px solid #bdbdbd; padding: 10px; border-radius: 6px; background: #d5d5d5;'>The Correct Answer is "&nbsp; <span style='background: #e7e9eb; padding: 5px; border: 2px solid #f7f7f7; border-radius: 4px;'>${data[i].correctAnswer}</span> &nbsp;"</div>
+                            <div style='background: #d5d5d5; padding: 10px; border: 2px solid #c7c7c7; border-radius: 6px; margin-top: 10px;'><b>Explanation:</b> ${data[i].explain}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            out_html = out_html +"</div>"
+            let UnattemptedAnswers = {{ correct_shuffle|length }} - (IncorrectAnswers+CorrectAnswers)
+            out_html = `
+            <div id='form'>
+            <div class="container mt-5" id="content">
+                <div class="card p-4 border bg-light" style="display: flex; flex-direction: column; align-content: center; align-items: center;">
+                    <div class="card-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <div class="score fs-2 fw-bold mb-4 text-center">Score</div>
+                        <div class="score fs-2 fw-bold text-primary d-flex justify-content-center align-items-center">
+                            <p style="padding: 15px; background: #4CAF50; color: white; width: 30%; text-align: center; border: 2px solid #45a049; border-radius: 18px;">${CorrectAnswers}</p>
+                        </div>
+                        <p style="text-align: center; font-weight: 700; color: #5f5f5f;">Out of ${TotalQuestions}</p>
+                        <div class="result-details fs-5 mb-4 text-center">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th scope="col" class="fw-bold">Metric</th>
+                                        <th scope="col" class="fw-bold">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="d-flex justify-content-start align-items-center fs-6" style="padding:12px;"><img style="width: 18px; margin-right: 10px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Blue_question_mark_icon.svg/768px-Blue_question_mark_icon.svg.png"/>Total Questions</td>
+                                        <td class="result-number">${TotalQuestions}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="d-flex justify-content-start align-items-center fs-6" style="padding:12px;"><img style="width: 18px; margin-right: 10px;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGibyczTntYRZF-4o5ucN9E_O3gOhGioBtRw&usqp=CAU"/>Correct Answers</td>
+                                        <td class="result-number text-success">${CorrectAnswers}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="d-flex justify-content-start align-items-center fs-6" style="padding:12px;"><img style="width: 18px; margin-right: 10px;" src="https://cdn-icons-png.flaticon.com/512/5184/5184592.png"/>Incorrect Answers</td>
+                                        <td class="result-number text-danger">${IncorrectAnswers}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="d-flex justify-content-start align-items-center fs-6" style="padding:12px;"><img style="width: 18px; margin-right: 10px;" src="https://pngimg.com/d/question_mark_PNG55.png"/>Unattempted Questions</td>
+                                        <td class="result-number text-warning">${UnattemptedAnswers}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="duration fs-5 mb-4">Duration: 15 minutes</div>
+                        <div>
+                            <canvas id="myChart" width="350" height="400"></canvas>
+                        </div>
+                    </div>
+                    <p style="font-weight: 900; text-transform: uppercase;" >You can check the Rank here :</p> <a href='/leaderboard_view/{{ path }}'><button style="font-weight: 900; text-transform: uppercase; margin-bottom: 35px; border: 2px solid #7a7a7a; padding: 10px; border-radius: 10px; background: none;">leaderboard</button></a>
+                </div>
+            </div>` + out_html
+        
+            console.log("Data:", JSON.stringify(data, null, 2), UnattemptedAnswers, IncorrectAnswers, CorrectAnswers);
+            document.body.innerHTML = out_html;
+            var data = {
+                labels: ['Correct Answers', 'Incorrect Answers', 'Unattempted Questions'],
+                datasets: [{
+                    data: [CorrectAnswers, IncorrectAnswers, UnattemptedAnswers], // Update these values with your actual data
+                    backgroundColor: ['#4CAF50', '#FF6384', '#FFCE56']
+                }]
+            };
+
+            // Options for the chart
+            var options1 = {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom'
+                }
+            };
+        
+            // Get the canvas element
+            var ctx = document.getElementById('myChart').getContext('2d');
+        
+            // Create the chart
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options1: options1
+            });
+
+            // Ajax request..!
+            $.ajax({
+                type: 'POST',
+                url: '/update_leaderboard',
+                data: JSON.stringify({
+                    'path': "{{ path }}",
+                    'mark': CorrectAnswers,
+                }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    alert("Test submitted successfully!");
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            
+
+        }
+        
+        
+        
+        // Timer implementation
+        var seconds = {{ timmer }}; // 10 minutes
+
+        function countdown() {
+            var timerDisplay = document.getElementById('countdown');
+            var hours = Math.floor(seconds / 3600);
+            var minutes = Math.floor((seconds % 3600) / 60);
+            var remainingSeconds = seconds % 60;
+            
+            var displayHours = (hours < 10 ? "0" : "") + hours;
+            var displayMinutes = (minutes < 10 ? "0" : "") + minutes;
+            var displaySeconds = (remainingSeconds < 10 ? "0" : "") + remainingSeconds;
+            
+            timerDisplay.textContent = displayHours + ":" + displayMinutes + ":" + displaySeconds;
+            
+            if (seconds === 0) {
+                clearInterval(countdownTimer);
+                submitForm();
+                // Handle timeout actions here
+            } else {
+                seconds--;
+            }
+        }
+        
+        var countdownTimer = setInterval(countdown, 1000);
+        
+
+        // Toggle function for question paragraphs
+        function toggle(btn_id, ele_id) {
+            var btn_obj = document.getElementById(btn_id);
+            var ele_obj = document.getElementById(ele_id);
+            if (btn_obj.textContent === "Open") {
+                ele_obj.style.display = "block";
+                btn_obj.innerHTML = "Close";
+            } else {
+                ele_obj.style.display = "none";
+                btn_obj.innerHTML = "Open";
+            }
+        }
+    </script>
+</body>
+</html>

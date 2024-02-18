@@ -48,6 +48,14 @@ https://templatemo.com/tm-568-digimedia
 
 -->
   </head>
+
+  <style>
+    @media screen and (max-width: 764px) {
+      #lo_byn{
+        display: block !important;
+      }
+    }
+  </style>
   
 
 <body>
@@ -88,9 +96,16 @@ https://templatemo.com/tm-568-digimedia
            
               <li class="scroll-to-section"><a href="#contact">Contact</a></li> 
               {% if auth %}
+                <li class="scroll-to-section" id="lo_byn" style="display:none"><a href="{% url 'logout' %}">Logout</a></li> 
+              {% else %}
+                <li class="scroll-to-section" id="lo_byn" style="display:none"><a href="{% url 'login' %}">SignIn</a></li> 
+              {% endif %}
+
+
+              {% if auth %}
               <li class="scroll-to-section"><div class="border-first-button"><a href="{% url 'logout' %}">Logout</a></div></li> 
               {% else %}
-              <li class="scroll-to-section"><div class="border-first-button"><a href="login">SignIn</a></div></li> 
+              <li class="scroll-to-section"><div class="border-first-button"><a href="/login">SignIn</a></div></li> 
               {% endif %}
             </ul>        
             <a class='menu-trigger'>

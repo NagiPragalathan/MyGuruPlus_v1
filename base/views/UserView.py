@@ -112,11 +112,11 @@ def ListCourse(request, path):
         
         
     if path == 'root':
-        return render(request, 'UserView/ListCourse.html', {'path':path,'path_alter':path.replace(".", "/"),'star':[1,2,3,4,5],'auth':request.user.is_authenticated,
+        return render(request, 'UserView/ListCourse.html', {'test_name':'root','path':path,'path_alter':path.replace(".", "/"),'star':[1,2,3,4,5],'auth':request.user.is_authenticated,
                                                         'path_list':out_path,'folders': mod_folder, 'files': Files,'user_exists':not user_exists,
                                                         'category':category, 'mcq':temp,'mcq_para':temp1, "premium" :premium, 'comments':comments})
     elif obj2.cost == 0 or (path.split('.')[1] in Subscription_path ) :
-        return render(request, 'UserView/ListCourse_Folder.html', {'path':path,'path_alter':path.replace(".", "/"),'star':[1,2,3,4,5],'auth':request.user.is_authenticated,
+        return render(request, 'UserView/ListCourse_Folder.html', {'test_name':path.split('.')[-1], 'path':path,'path_alter':path.replace(".", "/"),'star':[1,2,3,4,5],'auth':request.user.is_authenticated,
                                                         'path_list':out_path,'folders': mod_folder, 'files': Files,'user_exists':not user_exists,
                                                         'category':category, 'mcq':temp,'mcq_para':temp1, "premium" :premium, 'comments':comments})
     else:
@@ -186,20 +186,23 @@ def take_quiz(request, path):
     options = []
     explain = []
     correctAnswer = []
+    correct_int = []
     question_ids = []
 
     # out = {"instructions":mcq_questions[0].instructions,"questions":[{'id':question.id,'question': question.question, 'options': question.options,'explain':question.explain,"correctAnswer":question.correct_answer,"last_updated_date":question.last_updated_date.strftime('%Y-%m-%d %H:%M:%S')} for question in out_mcq]}
     for question in out_mcq:
         questions.append(question.question)
+        random.shuffle(question.options)
         options.append(question.options)
         explain.append(question.explain)
         man = question.correct_answer[-1]
         print(question.correct_answer, man)
         correctAnswer.append(question.options[int(man)-1])
+        correct_int.append(question.correct_answer[-1])
         question_ids.append(question.id)
     print(questions, options, correctAnswer)
     grouped_questions = mcq_questions_para.values('quest_id').annotate(total_questions=Count('id')) 
-
+    
     try:
         timmer = Config.objects.filter(q_path=path)[::-1][0].time_mis
     except:
@@ -217,6 +220,8 @@ def take_quiz(request, path):
             explain.append(i.explain)
             man = i.correct_answer[-1]
             correctAnswer.append(i.options[int(man)-1])
+            correct_int.append(i.correct_answer[-1])
+            
             question_ids.append(i.id)
             
         print("obj: ", obj)
@@ -240,26 +245,38 @@ def take_quiz(request, path):
     print(Subscription_path, path)
     
     correct_shuffle=[]
-    for a,b,c,d,e in zip(questions, options, correctAnswer, question_ids, explain):
-        correct_shuffle.append([a,b,c,d,e])
+    temp = []
+    for a,b,c,d,e,f in zip(questions, options, correctAnswer, question_ids, explain, correct_int):
+        if not isinstance(a, list):
+            print("questions,", a)
+            correct_shuffle.append([a,b,c,d,e, f])
     random.shuffle(correct_shuffle)
+    
+    for a,b,c,d,e,f in zip(questions, options, correctAnswer, question_ids, explain, correct_int):
+        if isinstance(a, list) :
+            print("out side :",a)
+            correct_shuffle.append([a,b,c,d,e,f])
+    random.shuffle(temp)
+    
+    correct_shuffle.extend(temp)
     print(correct_shuffle)
     question = []
     option = []
     correctAnswers = []
     question_id = []
     explains = []
+    correct_ints =[]
     
-    for a,b,c,d,e in correct_shuffle:
+    for a,b,c,d,e,f in correct_shuffle:
         question.append(a)
         option.append(b)
         correctAnswers.append(c)
         question_id.append(d)
         explains.append(e)
+        correct_ints.append(f)
         
-    
     if path.split('.')[1] in Subscription_path:
-        return render(request, "UserView/TakeQuiz.html",{'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path, 'ads': False})
+        return render(request, "UserView/Quiz.html",{"correct_ints":correct_ints,"correct_shuffle":correct_shuffle,'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path, 'ads': False})
     else:
-        return render(request, "UserView/TakeQuiz.html",{'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path,'ads' : True})
+        return render(request, "UserView/Quiz.html",{"correct_ints":correct_ints,"correct_shuffle":correct_shuffle, 'questions':question,'options':option, 'answers':correctAnswers, 'question_ids':question_id, "explain":explains, 'timmer':timmer, 'path':path,'ads' : True})
         

@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from QuizApp import settings
+import os
 
 # Django views
 from base.views.auth import *
@@ -19,9 +20,14 @@ from base.views.leaderboard import *
 from base.views.LastUpdates import *
 from base.views.Contect import *
 from base.views.Error import *
+from base.views.seo import *
 from django.conf.urls import handler403, handler404, handler500
 
 urlpatterns = []
+
+# Get the path to the ads.txt file
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ads_txt_path = os.path.join(BASE_DIR, 'ads.txt')
 
 
 handler404 = 'base.views.Error.custom_404'
@@ -75,7 +81,6 @@ question_manager = [
     path('delete_qust', delete_question, name='delete_question'),
     path('process_csv/<str:path>', process_csv, name='process_csv'),
 
-    # Add other URL patterns if needed
 ]
 
 UserView = [
@@ -137,6 +142,11 @@ Error_url = [
      path('custom_403' , custom_403 , name='custom_403'),
 ]
 
+seo=[
+    path('ads.txt', serve_ads_txt),
+    # path('ads.txt', serve, {'document_root': './', 'path': 'ads.txt'}),
+]
+
 urlpatterns.extend(admin_)
 urlpatterns.extend(auth)
 urlpatterns.extend(common)
@@ -151,6 +161,8 @@ urlpatterns.extend(LeaderBoard_url)
 urlpatterns.extend(LastUpdates_url)
 urlpatterns.extend(contact_url)
 urlpatterns.extend(Error_url)
+urlpatterns.extend(seo)
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

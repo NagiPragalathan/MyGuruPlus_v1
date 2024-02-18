@@ -25,14 +25,34 @@ def enter_otp(request):
         if User.objects.filter(email=email).exists():
             return redirect('login')
         else:
+            recipient_name = email.split('@')[0]
+            recipient_email = email.replace('@gmail.com', '')
+
             otp_value = generate_otp()
+            subject = '🔐 Login Verification for Your New Account'
+            body = (
+                '<html>'
+                '<body style="font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 20px;">'
+                '<h1 style="color: #333;">🔐 Login Verification for Your Account</h1>'
+                '<p style="font-size: 16px; color: #666;">'
+                f'Dear {recipient_name},<br><br>'
+                'Please use the following OTP to verify your login: 🔑<br><br>'
+                f'<strong>{otp_value}</strong><br><br>'
+                'If you did not request this login verification, please ignore this email.<br><br>'
+                'Thank you for using our services. 🙏<br><br>'
+                'Best regards,<br>'
+                'MyGuruPlus Team'
+                '</p>'
+                '</body>'
+                '</html>'
+            )
             print(otp_value)
             send_mail(
-                'Congratulations!',                         # subject
-                'You are lucky to receive this mail.',      # body
+                subject,                         # subject
+                body,      # body
                 'sitejec@gmail.com',                        # sender Email
                 [email],                                    # receiver mail
-                html_message=f"<h1>Your otp is :</h1> <p>{otp_value}</p>",
+                html_message=body,
                 fail_silently=False,
             )
             otp_verification = OTPVerification(email=email,otp_key=otp_value)
@@ -74,7 +94,8 @@ def signup(request, mail):
                         return redirect('home')  # Redirect to your home page
                 else:
                     # The OTP was not updated within the last 2 minutes, handle accordingly
-                    return render(request, "auth/signup.html", {"mail":mail, "msg":"The Otp is expired. So again enter the password create new one. <a href='enter_otp'>click here</a> to redirect"})
+                    return render(request, "auth/signup.html", {"mail": mail, "msg": "The OTP has expired. Please enter a new one to create your password. <a href='/enter_otp'>Click here</a> to redirect."})
+
             else:
                 return render(request, "auth/signup.html", {"mail":mail, "msg":"The Otp do not match, Try again"})
         else:

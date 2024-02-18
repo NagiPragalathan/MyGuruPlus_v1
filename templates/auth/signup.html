@@ -24,45 +24,47 @@
                     <div class="card-body p-4 p-lg-5 text-black">
                     {% if msg %}
                     <div id="message" style="background-color: #f44336; color: white; padding: 10px; display: flex; border-radius: 10px; margin-bottom: 12px; justify-content: space-between;">
-                        {{ msg }}
+                        {{ msg|safe }}
                         <button onclick="closeMessage()" style="border-radius: 7px; width: 29px; border: 1px solid #83d083; background: white;">X</button>
                     </div>
                     {% else %}
                         <div></div>
                     {% endif %}
-                    <form method="post" action="{% url 'signup' mail=mail %}">
-                        {% csrf_token %}
-                        <div class="d-flex align-items-center mb-3 pb-1">
+                    <form method="post" action="{% url 'signup' mail=mail %}" onsubmit="return validateForm()">
+                      {% csrf_token %}
+                      <div class="d-flex align-items-center mb-3 pb-1">
                           <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
                           <span class="h1 fw-bold mb-0">Myguruplus</span>
-                        </div>
-                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">SignUp your account here</h5>
-  
-      
-                        <div class="form-outline mb-4">
-                          <label class="form-label" for="otp">otp:</label>
+                      </div>
+                      <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">SignUp your account here</h5>
+                  
+                      <div class="form-outline mb-4">
+                          <label class="form-label" for="otp">OTP:</label>
                           <input type="text" id="otp" name="otp" class="form-control form-control-lg" required>
-                        </div>
-                        <div class="form-outline mb-4">
-                          <label class="form-label" for="username">username:</label>
+                          <div id="otpError" class="text-danger"></div>
+                      </div>
+                      <div class="form-outline mb-4">
+                          <label class="form-label" for="username">Username:</label>
                           <input type="text" id="username" name="username" class="form-control form-control-lg" required>
-                        </div>
-                        <div class="form-outline mb-4">
-                          <label class="form-label" for="password">password:</label>
+                          <div id="usernameError" class="text-danger"></div>
+                      </div>
+                      <div class="form-outline mb-4">
+                          <label class="form-label" for="password">Password:</label>
                           <input type="password" id="password" name="password" class="form-control form-control-lg" required>
-                        </div>
-                        <div class="form-outline mb-4">
-                          <label class="form-label" for="confirm_password">confirm password:</label>
-                          <input type="text" id="confirm_password" name="confirm_password" class="form-control form-control-lg" required>
-                        </div>
-      
-                        <div class="pt-1 mb-4">
-                          <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
-                        </div>
-      
-                        <p class="mb-5 pb-lg-2" style="color: #393f81;">If you have an account? <a href="/login"
-                            style="color: #393f81;">SignIn here</a></p>
-                    </form>
+                          <div id="passwordError" class="text-danger"></div>
+                      </div>
+                      <div class="form-outline mb-4">
+                          <label class="form-label" for="confirm_password">Confirm Password:</label>
+                          <input type="password" id="confirm_password" name="confirm_password" class="form-control form-control-lg" required>
+                          <div id="confirmPasswordError" class="text-danger"></div>
+                      </div>
+                  
+                      <div class="pt-1 mb-4">
+                          <button class="btn btn-dark btn-lg btn-block" type="submit">Sign Up</button>
+                      </div>
+                  
+                      <p class="mb-5 pb-lg-2" style="color: #393f81;">If you have an account? <a href="/login" style="color: #393f81;">SignIn here</a></p>
+                  </form>
                     </div>
                   </div>
                 </div>
@@ -77,6 +79,50 @@
         // Your custom close logic here
         document.getElementById('message').style.display = 'none';
     }
+    function validateForm() {
+      var otp = document.getElementById('otp').value;
+      var username = document.getElementById('username').value;
+      var password = document.getElementById('password').value;
+      var confirmPassword = document.getElementById('confirm_password').value;
+
+      // Reset previous error messages
+      document.getElementById('otpError').textContent = '';
+      document.getElementById('usernameError').textContent = '';
+      document.getElementById('passwordError').textContent = '';
+      document.getElementById('confirmPasswordError').textContent = '';
+
+      var isValid = true;
+
+      // OTP validation
+      if (otp.length !== 6) {
+          document.getElementById('otpError').textContent = 'OTP must be 6 characters long.';
+          isValid = false;
+      }
+
+      // Username validation (example: must be at least 4 characters long)
+      if (username.length < 4) {
+          document.getElementById('usernameError').textContent = 'Username must be at least 4 characters long.';
+          isValid = false;
+      }
+
+      // Password validation (example: must be at least 8 characters long)
+    // Password validation
+    if (password.length < 8) {
+        document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long.';
+        isValid = false;
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/.test(password)) {
+        document.getElementById('passwordError').textContent = 'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
+        isValid = false;
+    }
+
+      // Confirm password validation
+      if (password !== confirmPassword) {
+          document.getElementById('confirmPasswordError').textContent = 'Passwords do not match.';
+          isValid = false;
+      }
+
+      return isValid;
+  }
 </script>
 
 </html>
